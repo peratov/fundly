@@ -1,0 +1,1 @@
+ALTER TABLE "circles" ADD COLUMN "extra_token_hashes" text[] DEFAULT '{}'::text[] NOT NULL;
