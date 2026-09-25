@@ -3,6 +3,7 @@ import { compress } from "hono/compress";
 import { secureHeaders } from "hono/secure-headers";
 import { requireAuth, requireTenant } from "./lib/auth";
 import type { AppEnv, Deps } from "./lib/context";
+import { sha256, safeEqualHex } from "./lib/crypto";
 import { AppError } from "./lib/http";
 import { adminRoutes } from "./routes/admin";
 import { authRoutes } from "./routes/auth";
@@ -15,6 +16,7 @@ import { paymentRoutes } from "./routes/payments";
 import { publicRoutes } from "./routes/public";
 import { learnRoutes } from "./learn/routes";
 import { savingsRoutes } from "./routes/savings";
+import { runScheduledJobs } from "./services/jobs";
 import { completePayment } from "./services/payments";
 
 export function createApp(deps: Deps) {
@@ -44,6 +46,15 @@ export function createApp(deps: Deps) {
   });
 
   app.get("/api/health", async (c) => c.json({ ok: true, provider: deps.payments.name }));
+
+  // Daily maintenance for hosts without a job runner (Vercel Cron calls this with the secret).
+  app.get("/api/cron/daily", async (c) => {
+    const secret = deps.config.cronSecret;
+    if (!secret) throw new AppError(404, "not_found", "Not found");
+    const given = c.req.header("authorization")?.replace(/^Bearer /, "") ?? "";
+    if (!safeEqualHex(sha256(given), sha256(secret))) throw new AppError(401, "unauthorized", "Invalid cron secret");
+    return c.json(await runScheduledJobs(deps.db, deps.clock.now()));
+  });
 
   // Server-rendered knowledge base, sitemap, robots.txt and RSS (indexable without JavaScript).
   app.route("/", learnRoutes);

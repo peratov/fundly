@@ -13,6 +13,8 @@ export interface Config {
   emailFrom: string;
   resendApiKey?: string;
   smtpUrl?: string;
+  /** Bearer secret for /api/cron/daily (Vercel Cron sends it automatically when CRON_SECRET is set). */
+  cronSecret?: string;
 }
 
 export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
@@ -38,7 +40,7 @@ export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
     databaseUrl: env.DATABASE_URL || undefined,
     dataDir: env.DATA_DIR ?? ".data/pglite",
     // Hosts like Render expose the public URL themselves; an explicit APP_URL (custom domain) wins.
-    appUrl: (env.APP_URL ?? env.RENDER_EXTERNAL_URL ?? "http://localhost:5173").replace(/\/$/, ""),
+    appUrl: (env.APP_URL ?? env.RENDER_EXTERNAL_URL ?? (env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined) ?? "http://localhost:5173").replace(/\/$/, ""),
     isProd,
     paymentProvider: provider,
     paystackSecretKey: env.PAYSTACK_SECRET_KEY || undefined,
@@ -49,5 +51,6 @@ export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
     emailFrom: env.EMAIL_FROM ?? "Fundly <hello@fundly.app>",
     resendApiKey: env.RESEND_API_KEY || undefined,
     smtpUrl: env.SMTP_URL || undefined,
+    cronSecret: env.CRON_SECRET || undefined,
   };
 }

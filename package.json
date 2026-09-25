@@ -11,6 +11,8 @@
     "start": "node dist/server/main.js",
     "db:generate": "drizzle-kit generate",
     "db:seed": "tsx server/scripts/seed.ts",
+    "db:migrate": "tsx server/scripts/migrate.ts",
+    "build:vercel": "npm run build && node scripts/vercel/build.mjs",
     "demo:capture": "node scripts/capture-demo.mjs",
     "jobs": "tsx server/scripts/jobs.ts",
     "test": "vitest run",

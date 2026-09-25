@@ -12,55 +12,13 @@
  * fund's failure never blocks the rest and locks stay short.
  */
 import { existsSync } from "node:fs";
-import { asc, gt } from "drizzle-orm";
-import { addMonths, periodOf } from "../../shared/period";
 import { loadConfig } from "../config";
 import { openDb } from "../db/client";
-import { tenants } from "../db/schema";
-import type { Actor } from "../lib/context";
-import { flagOverdueLoans } from "../services/loans";
-import { closePeriod } from "../services/savings";
+import { runScheduledJobs } from "../services/jobs";
 
 if (existsSync(".env")) process.loadEnvFile(".env");
 const config = loadConfig();
 const { db, close } = await openDb({ url: config.databaseUrl, dataDir: config.dataDir });
-
-const now = new Date();
-const today = now.toISOString().slice(0, 10);
-const lastMonth = addMonths(periodOf(now), -1);
-const actor: Actor = { userId: null, name: "Scheduled job" };
-const BATCH = 100;
-
-let cursor = "00000000-0000-0000-0000-000000000000";
-let processed = 0;
-let failures = 0;
-for (;;) {
-  const batch = await db
-    .select()
-    .from(tenants)
-    .where(gt(tenants.id, cursor))
-    .orderBy(asc(tenants.id))
-    .limit(BATCH);
-  if (!batch.length) break;
-  cursor = batch.at(-1)!.id;
-
-  for (const tenant of batch.filter((t) => ["active", "trial"].includes(t.status))) {
-    try {
-      await db.transaction(async (tx) => {
-        const flagged = await flagOverdueLoans(tx, tenant, actor, today);
-        // Give members until the due day to pay last month before it's closed.
-        const closed = now.getUTCDate() > tenant.settings.contributionDueDay ? await closePeriod(tx, tenant, actor, lastMonth) : null;
-        if (flagged || closed?.markedMissed) console.log(`[jobs] ${tenant.name}: ${flagged} overdue, ${closed?.markedMissed ?? 0} missed`);
-      });
-      processed++;
-    } catch (err) {
-      failures++;
-      console.error(`[jobs] ${tenant.name} failed:`, err);
-    }
-  }
-}
-
-console.log(`[jobs] done: ${processed} funds processed, ${failures} failed`);
+const { failures } = await runScheduledJobs(db, new Date());
 await close();
 process.exit(failures ? 1 : 0);
-

@@ -136,6 +136,11 @@ On phones, tables become stacked cards and modals open as bottom sheets. Staff a
   - switch `PAYMENT_PROVIDER` to `paystack` and add `PAYSTACK_SECRET_KEY`, then point Paystack's webhook at `https://<your-app>/api/webhooks/paystack`;
   - configure email (`EMAIL_PROVIDER=resend` with `RESEND_API_KEY` and `EMAIL_FROM`);
   - move off the free plans. Render's free web service sleeps when idle, and the free database expires after 30 days.
+- **Vercel:** `vercel.json` builds a Vercel [Build Output](https://vercel.com/docs/build-output-api) with `npm run build:vercel`.
+  - **How it runs:** the app and the demo are served from Vercel's CDN. The API, knowledge base, sitemap and `robots.txt` run as one Node function (`scripts/vercel/handler.ts`).
+  - **Database:** add Postgres to the project (Storage → Neon), which sets `DATABASE_URL`, then redeploy. Migrations run during production builds (`npm run db:migrate`).
+  - **Scheduled jobs:** set `CRON_SECRET` (any long random string). Vercel Cron then calls `/api/cron/daily` every day at 03:00 UTC.
+  - **Public URL:** taken from `VERCEL_PROJECT_PRODUCTION_URL` unless you set `APP_URL`.
 - **Other hosts:** the same Docker image runs anywhere (Fly.io, Railway, a VPS with `docker compose up`). It needs `DATABASE_URL` and `APP_URL`.
 
 ## Configuration

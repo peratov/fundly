@@ -18,15 +18,24 @@ const migrationsFolder = path.resolve(path.dirname(fileURLToPath(import.meta.url
  * Local dev and tests use PGlite (Postgres compiled to WASM), so the exact same
  * SQL and migrations run everywhere with no external service to install.
  */
-export async function openDb(opts: { url?: string; dataDir?: string; migrationsDir?: string } = {}): Promise<DbHandle> {
+export async function openDb(opts: { url?: string; dataDir?: string; migrationsDir?: string; migrate?: boolean; serverless?: boolean } = {}): Promise<DbHandle> {
+  const runMigrations = opts.migrate ?? true;
   const folder = opts.migrationsDir ?? migrationsFolder;
   if (opts.url) {
     const { default: postgres } = await import("postgres");
     const { drizzle } = await import("drizzle-orm/postgres-js");
     const { migrate } = await import("drizzle-orm/postgres-js/migrator");
-    const client = postgres(opts.url, { max: Number(process.env.DB_POOL_SIZE ?? 10), onnotice: () => {} });
+    // Serverless instances are many and short-lived: keep few connections, and skip prepared
+    // statements so transaction-mode poolers (Neon, Supabase, PgBouncer) work.
+    const pooled = opts.serverless || /-pooler\.|pgbouncer=true|:6543\//.test(opts.url);
+    const client = postgres(opts.url, {
+      max: Number(process.env.DB_POOL_SIZE ?? (opts.serverless ? 3 : 10)),
+      idle_timeout: opts.serverless ? 20 : undefined,
+      prepare: !pooled,
+      onnotice: () => {},
+    });
     const db = drizzle(client, { schema });
-    await migrate(db, { migrationsFolder: folder });
+    if (runMigrations) await migrate(db, { migrationsFolder: folder });
     return { db: db as unknown as Db, close: () => client.end() };
   }
 
@@ -37,7 +46,7 @@ export async function openDb(opts: { url?: string; dataDir?: string; migrationsD
   const client = opts.dataDir ? new PGlite(opts.dataDir) : new PGlite();
   const db = drizzle(client, { schema });
   try {
-    await migrate(db, { migrationsFolder: folder });
+    if (runMigrations) await migrate(db, { migrationsFolder: folder });
   } catch (e) {
     release();
     throw e;

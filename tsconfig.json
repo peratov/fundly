@@ -15,5 +15,5 @@
     "types": ["node", "vite/client"],
     "noEmit": true
   },
-  "include": ["shared", "server", "web/src", "tests", "vite.config.ts", "drizzle.config.ts"]
+  "include": ["shared", "server", "web/src", "tests", "scripts/vercel", "vite.config.ts", "drizzle.config.ts"]
 }

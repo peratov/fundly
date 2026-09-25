@@ -2,34 +2,11 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { createApp } from "./app";
-import { loadConfig } from "./config";
-import { openDb } from "./db/client";
-import { claudeAssistant, templateAssistant } from "./lib/assistant";
-import { systemClock } from "./lib/context";
-import { devMailer, resendMailer, smtpMailer } from "./email/mailer";
-import { mockProvider, paystackProvider } from "./payments/provider";
+import { bootstrap } from "./bootstrap";
 
 if (existsSync(".env")) process.loadEnvFile(".env");
 
-const config = loadConfig();
-const { db, close } = await openDb({ url: config.databaseUrl, dataDir: config.dataDir });
-
-const mailer =
-  config.emailProvider === "resend"
-    ? resendMailer(config.resendApiKey!, config.emailFrom)
-    : config.emailProvider === "smtp"
-      ? await smtpMailer(config.smtpUrl!, config.emailFrom)
-      : devMailer({ dir: ".data/outbox", log: true });
-
-const app = createApp({
-  db,
-  config,
-  clock: systemClock,
-  payments: config.paymentProvider === "paystack" ? paystackProvider(config.paystackSecretKey!) : mockProvider(),
-  assistant: config.anthropicApiKey ? claudeAssistant(config.anthropicApiKey) : templateAssistant,
-  mailer,
-});
+const { app, config, close, mailer } = await bootstrap();
 
 // In production the API also serves the built SPA.
 const webDir = path.resolve("dist/web");

@@ -166,6 +166,12 @@ describe("reports", () => {
   });
 });
 
+describe("scheduled jobs endpoint", () => {
+  it("is hidden unless CRON_SECRET is configured", async () => {
+    expect((await client(env).get("/api/cron/daily")).status).toBe(404);
+  });
+});
+
 describe("platform admin access", () => {
   it("revokes operator access as soon as an email leaves PLATFORM_ADMIN_EMAILS", async () => {
     const sneaky = client(env);
