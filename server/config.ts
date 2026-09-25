@@ -37,7 +37,8 @@ export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
     port: Number(env.API_PORT ?? (env.NODE_ENV === "production" ? env.PORT : undefined) ?? 3000),
     databaseUrl: env.DATABASE_URL || undefined,
     dataDir: env.DATA_DIR ?? ".data/pglite",
-    appUrl: (env.APP_URL ?? "http://localhost:5173").replace(/\/$/, ""),
+    // Hosts like Render expose the public URL themselves; an explicit APP_URL (custom domain) wins.
+    appUrl: (env.APP_URL ?? env.RENDER_EXTERNAL_URL ?? "http://localhost:5173").replace(/\/$/, ""),
     isProd,
     paymentProvider: provider,
     paystackSecretKey: env.PAYSTACK_SECRET_KEY || undefined,

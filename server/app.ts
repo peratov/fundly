@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { compress } from "hono/compress";
 import { secureHeaders } from "hono/secure-headers";
 import { requireAuth, requireTenant } from "./lib/auth";
 import type { AppEnv, Deps } from "./lib/context";
@@ -20,6 +21,8 @@ export function createApp(deps: Deps) {
   const app = new Hono<AppEnv>();
 
   app.use("*", secureHeaders({ crossOriginResourcePolicy: "same-origin" }));
+  // gzip/deflate for HTML, JSON, CSS and JS (the demo snapshot shrinks ~10x); CSV downloads stream uncompressed.
+  app.use("*", compress({ threshold: 1024 }));
   app.use("*", async (c, next) => {
     c.set("deps", deps);
     await next();

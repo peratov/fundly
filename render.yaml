@@ -1,0 +1,46 @@
+# Render Blueprint: one web service (built from the Dockerfile) + managed Postgres.
+# Deploy: https://render.com/deploy?repo=https://github.com/peratov/fundly
+# Migrations run automatically on start; the public URL is picked up from RENDER_EXTERNAL_URL.
+services:
+  - type: web
+    name: fundly
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fundly-db
+          property: connectionString
+      # Simulated payments until you add Paystack keys (then set PAYMENT_PROVIDER=paystack).
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      # Emails are only logged until you configure Resend or SMTP.
+      - key: EMAIL_PROVIDER
+        value: dev
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      # Your email, to get the operator console at /admin.
+      - key: PLATFORM_ADMIN_EMAILS
+        sync: false
+      # Optional: AI-written credit narratives.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Optional: set when you add a custom domain, e.g. https://fundly.app
+      - key: APP_URL
+        sync: false
+
+databases:
+  - name: fundly-db
+    plan: free
+    region: frankfurt
+    databaseName: fundly
+    user: fundly

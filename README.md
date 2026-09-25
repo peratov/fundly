@@ -124,6 +124,20 @@ Guides live as Markdown in `content/learn/` and are rendered on the server as pl
 
 On phones, tables become stacked cards and modals open as bottom sheets. Staff and members get a bottom tab bar with a raised primary action. Inputs use 16px text so iOS doesn't zoom in. The app installs as a PWA (`web/public/manifest.webmanifest`). To regenerate the icons, run `node scripts/make-icons.mjs`.
 
+## Deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/peratov/fundly)
+
+`render.yaml` is a Render Blueprint. It sets up the app, built from the `Dockerfile`, plus a managed Postgres database.
+
+- **Automatic setup:** database migrations run when the app starts. The public URL comes from Render (`RENDER_EXTERNAL_URL`) unless you set `APP_URL`. Every push to `main` redeploys.
+- **Before real members use it:**
+  - set `PLATFORM_ADMIN_EMAILS` to your email;
+  - switch `PAYMENT_PROVIDER` to `paystack` and add `PAYSTACK_SECRET_KEY`, then point Paystack's webhook at `https://<your-app>/api/webhooks/paystack`;
+  - configure email (`EMAIL_PROVIDER=resend` with `RESEND_API_KEY` and `EMAIL_FROM`);
+  - move off the free plans. Render's free web service sleeps when idle, and the free database expires after 30 days.
+- **Other hosts:** the same Docker image runs anywhere (Fly.io, Railway, a VPS with `docker compose up`). It needs `DATABASE_URL` and `APP_URL`.
+
 ## Configuration
 
 See `.env.example`. Notable settings:
