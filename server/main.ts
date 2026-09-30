@@ -18,7 +18,7 @@ if (config.isProd && existsSync(webDir)) {
 }
 
 const server = serve({ fetch: app.fetch, port: config.port }, (info) => {
-  console.log(`[fundly] API on http://localhost:${info.port} · db=${config.databaseUrl ? "postgres" : `pglite(${config.dataDir})`} · payments=${config.paymentProvider} · ai=${config.anthropicApiKey ? "claude" : "templates"} · email=${mailer.name}`);
+  console.log(`[awafund] API on http://localhost:${info.port} · db=${config.databaseUrl ? "postgres" : `pglite(${config.dataDir})`} · payments=${config.paymentProvider} · ai=${config.anthropicApiKey ? "claude" : "templates"} · email=${mailer.name}`);
 });
 
 const shutdown = async () => {

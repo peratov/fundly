@@ -44,7 +44,7 @@ After a set number of missed payments, the member's standing changes. A common s
 | 2 | Behind | No new loans until up to date |
 | 3+ | Voided / suspended | Welfare and loans paused; review by the committee |
 
-Standing should **recover automatically** once the member catches up, so there's always a way back. (Fundly applies this for you: when a member pays a missed month, their standing is recalculated straight away.)
+Standing should **recover automatically** once the member catches up, so there's always a way back. (AwaFund applies this for you: when a member pays a missed month, their standing is recalculated straight away.)
 
 ## Step 5: Call on the guarantor
 
@@ -72,4 +72,4 @@ If someone can't continue, agree a clean exit: what they're owed or what they ow
 
 ## Prevention beats cure
 
-The groups with the fewest problems do three things: they put newer members later in the order, they collect by traceable mobile money, and everyone can see the same up-to-date record. You can set up all three for free with the [merry-go-round planner](/tools/merry-go-round), or run a full fund with automatic standing and reminders on [Fundly](/signup).
+The groups with the fewest problems do three things: they put newer members later in the order, they collect by traceable mobile money, and everyone can see the same up-to-date record. You can set up all three for free with the [merry-go-round planner](/tools/merry-go-round), or run a full fund with automatic standing and reminders on [AwaFund](/signup).

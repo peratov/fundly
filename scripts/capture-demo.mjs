@@ -14,7 +14,7 @@ import { writeFileSync } from "node:fs";
 
 const API = process.env.API_URL ?? "http://localhost:3000/api";
 const ORIGIN = process.env.APP_URL ?? "http://localhost:5173";
-const PASSWORD = "fundly-demo";
+const PASSWORD = "awafund-demo";
 const OUT = new URL("../web/public/demo/fixtures.json", import.meta.url);
 
 async function login(email) {

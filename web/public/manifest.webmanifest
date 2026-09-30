@@ -1,6 +1,6 @@
 {
-  "name": "Fundly",
-  "short_name": "Fundly",
+  "name": "AwaFund",
+  "short_name": "AwaFund",
   "description": "Savings, loans and welfare for your group — dues by mobile money, books that always balance.",
   "start_url": "/app",
   "scope": "/",

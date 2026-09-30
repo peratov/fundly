@@ -48,7 +48,7 @@ export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
     platformAdminEmails: (env.PLATFORM_ADMIN_EMAILS ?? "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean),
     sessionDays: Number(env.SESSION_DAYS ?? 14),
     emailProvider,
-    emailFrom: env.EMAIL_FROM ?? "Fundly <hello@fundly.app>",
+    emailFrom: env.EMAIL_FROM ?? "AwaFund <hello@awafund.app>",
     resendApiKey: env.RESEND_API_KEY || undefined,
     smtpUrl: env.SMTP_URL || undefined,
     cronSecret: env.CRON_SECRET || undefined,

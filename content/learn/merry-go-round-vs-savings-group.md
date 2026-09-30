@@ -69,4 +69,4 @@ Answer these five questions:
 
 Many groups start as a merry-go-round and add a savings fund after a year or two, once trust and record-keeping habits are established.
 
-Start with a [free rotation plan](/tools/merry-go-round). When you're ready for loans, shares and welfare with books that balance themselves, [Fundly](/signup) runs the accumulating side for you.
+Start with a [free rotation plan](/tools/merry-go-round). When you're ready for loans, shares and welfare with books that balance themselves, [AwaFund](/signup) runs the accumulating side for you.

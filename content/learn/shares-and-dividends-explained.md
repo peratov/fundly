@@ -78,4 +78,4 @@ Member savings are what the fund **owes** its members; interest income is what i
 - Paying dividends while **loans are in serious arrears** — the income may not really be there yet.
 - Letting officials award themselves **bonus shares** without a members' vote.
 
-[Fundly](/signup) issues shares automatically at the price in force each month, keeps a full share register with each member's ownership percentage, and records bonus grants with reasons in the audit log.
+[AwaFund](/signup) issues shares automatically at the price in force each month, keeps a full share register with each member's ownership percentage, and records bonus grants with reasons in the audit log.

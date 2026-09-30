@@ -116,7 +116,7 @@ export function AppShell() {
       <NavGroup title="My account" items={MEMBER_NAV} base={`/f/${tenantId}`} />
       {me.user.isPlatformAdmin && <NavGroup title="Platform" items={[{ to: "/admin", label: "Operator console", icon: <Shield /> }]} base="" />}
       <div className="mt-auto flex items-center gap-2 px-3 pt-4 text-xs text-white/30">
-        <span className="size-1.5 rounded-full bg-emerald-400" /> Books balanced · Fundly
+        <span className="size-1.5 rounded-full bg-emerald-400" /> Books balanced · AwaFund
       </div>
     </nav>
   );

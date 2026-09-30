@@ -64,4 +64,4 @@ Two or three members who hold **no other office**. They have read-only access to
 
 Writing short descriptions like these helps candidates know what they're signing up for — and makes it easier to find volunteers at the [AGM](/learn/how-to-run-an-agm).
 
-These controls are built into [Fundly](/signup): roles for owner, fund manager, credit committee, audit committee and members, where each person only sees and does what their role allows, and every action lands in an audit log. For more on protecting your fund, read [preventing fraud in group funds](/learn/preventing-fraud-in-group-funds).
+These controls are built into [AwaFund](/signup): roles for owner, fund manager, credit committee, audit committee and members, where each person only sees and does what their role allows, and every action lands in an audit log. For more on protecting your fund, read [preventing fraud in group funds](/learn/preventing-fraud-in-group-funds).

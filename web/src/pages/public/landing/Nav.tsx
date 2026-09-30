@@ -15,10 +15,10 @@ export function Logo({ light = true }: { light?: boolean }) {
     <Link to="/" className={clsx("flex items-center gap-2 font-display text-xl font-extrabold tracking-tight", light ? "text-white" : "text-slate-900 dark:text-white")}>
       <span className="relative flex size-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-400 via-grape-500 to-coral-500 text-white shadow-lg shadow-grape-500/30">
         <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M7 20V5h10M7 12h8" />
+          <path d="M5.5 20 12 4.5 18.5 20M8.2 14h7.6" />
         </svg>
       </span>
-      Fundly
+      AwaFund
     </Link>
   );
 }

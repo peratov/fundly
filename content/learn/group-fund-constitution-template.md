@@ -86,4 +86,4 @@ Use our [annual audit checklist](/learn/annual-audit-checklist-savings-group).
 
 ---
 
-Once your rules are agreed, the hard part is applying them consistently every month. [Fundly](/signup) turns these clauses into settings — dues, standing thresholds, welfare limits, loan policy and committee approvals — so the fund runs by its own constitution automatically.
+Once your rules are agreed, the hard part is applying them consistently every month. [AwaFund](/signup) turns these clauses into settings — dues, standing thresholds, welfare limits, loan policy and committee approvals — so the fund runs by its own constitution automatically.

@@ -90,4 +90,4 @@ A one-line disclosure avoids misunderstandings:
 
 Showing the real money amounts, not just a percentage, is the clearest way to be fair.
 
-Fundly uses flat interest fixed at approval, shows the member the whole schedule before they apply, and splits every repayment into principal, interest and penalties automatically. [Try it free](/signup).
+AwaFund uses flat interest fixed at approval, shows the member the whole schedule before they apply, and splits every repayment into principal, interest and penalties automatically. [Try it free](/signup).

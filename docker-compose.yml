@@ -4,12 +4,12 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: fundly
-      POSTGRES_PASSWORD: fundly
-      POSTGRES_DB: fundly
+      POSTGRES_USER: awafund
+      POSTGRES_PASSWORD: awafund
+      POSTGRES_DB: awafund
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U fundly"]
+      test: ["CMD-SHELL", "pg_isready -U awafund"]
       interval: 5s
       retries: 10
   app:
@@ -17,7 +17,7 @@ services:
     depends_on:
       db: { condition: service_healthy }
     environment:
-      DATABASE_URL: postgres://fundly:fundly@db:5432/fundly
+      DATABASE_URL: postgres://awafund:awafund@db:5432/awafund
       APP_URL: http://localhost:3000
       PAYMENT_PROVIDER: mock
     ports: ["3000:3000"]

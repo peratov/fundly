@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { clsx } from "../../../components/ui";
 
 /**
- * The real Fundly app, running in demo mode (web/src/demo/demo.ts), shown in a frame.
+ * The real AwaFund app, running in demo mode (web/src/demo/demo.ts), shown in a frame.
  * The iframe renders at a true device size (e.g. 390×844 or 1280×800) and is scaled to
  * fit its container, so it looks exactly like the product on that device.
  */

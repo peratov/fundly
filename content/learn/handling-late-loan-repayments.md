@@ -71,4 +71,4 @@ Her loan is overdue. The committee applies the agreed GHS 50 penalty and contact
 
 That's the process working as intended: consistent, documented and humane.
 
-In [Fundly](/signup), loans that fall behind schedule are flagged as overdue automatically, penalties are recorded with reasons, repayments clear penalties first, loans return to active when caught up, and write-offs post correctly to the books.
+In [AwaFund](/signup), loans that fall behind schedule are flagged as overdue automatically, penalties are recorded with reasons, repayments clear penalties first, loans return to active when caught up, and write-offs post correctly to the books.

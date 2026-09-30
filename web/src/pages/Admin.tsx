@@ -30,7 +30,7 @@ export default function Admin() {
         <Card className="max-w-sm text-center">
           <ShieldOff className="mx-auto size-8 text-slate-400" />
           <h1 className="mt-3 text-lg font-semibold">Operators only</h1>
-          <p className="mt-1 text-sm text-slate-500">This console is for Fundly platform administrators. Your account doesn't have access.</p>
+          <p className="mt-1 text-sm text-slate-500">This console is for AwaFund platform administrators. Your account doesn't have access.</p>
           <Link to="/app" className="mt-4 inline-flex text-sm font-semibold text-brand-700 hover:underline">
             Go to my funds
           </Link>
@@ -76,7 +76,7 @@ function Console() {
             <Shield className="size-4 text-brand-300" />
           </span>
           <div className="flex-1">
-            <p className="text-sm font-semibold tracking-wide">Fundly Operations</p>
+            <p className="text-sm font-semibold tracking-wide">AwaFund Operations</p>
             <p className="text-xs text-white/50">Restricted · platform administrators only</p>
           </div>
           <Link to="/app" className="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium text-white/70 ring-1 ring-white/15 hover:bg-white/5 hover:text-white">

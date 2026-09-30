@@ -26,7 +26,7 @@ Easy to start, but it mixes group and personal money, depends on one person, and
 A number or till used **only** for the fund. Much better: statements show only fund money, and several officials can have visibility. Check what your provider offers for groups and businesses.
 
 ### 3. Automated collection through your fund software
-The member taps "Pay", approves a prompt on their phone with their own PIN, and the payment is **matched to their account automatically** — no screenshots, no manual ticking. This is how Fundly works: the payment lands, the contribution is recorded, shares are issued and the member's standing updates in one go.
+The member taps "Pay", approves a prompt on their phone with their own PIN, and the payment is **matched to their account automatically** — no screenshots, no manual ticking. This is how AwaFund works: the payment lands, the contribution is recorded, shares are issued and the member's standing updates in one go.
 
 ## Make every payment identifiable
 
@@ -75,4 +75,4 @@ Once money is coming in, [reconcile your mobile money statement](/learn/reconcil
 
 ## Getting started
 
-For a merry-go-round, have members pay the recipient directly and tick them off — the [free planner](/tools/merry-go-round) has payment tracking and one-tap WhatsApp reminders. For a full savings fund, [Fundly](/signup) sends mobile money prompts straight to members' phones and posts every successful payment to the right member automatically.
+For a merry-go-round, have members pay the recipient directly and tick them off — the [free planner](/tools/merry-go-round) has payment tracking and one-tap WhatsApp reminders. For a full savings fund, [AwaFund](/signup) sends mobile money prompts straight to members' phones and posts every successful payment to the right member automatically.

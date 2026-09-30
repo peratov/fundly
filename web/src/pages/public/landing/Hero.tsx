@@ -162,7 +162,7 @@ function LiveStage() {
             <span className="h-4 w-20 rounded-full bg-black" />
             <span>5G ▮▮▮</span>
           </div>
-          <LiveScreen src="/f/demo-member/portal" width={390} height={780} eager interactive={!touch} title="The Fundly member app, running live with demo data" />
+          <LiveScreen src="/f/demo-member/portal" width={390} height={780} eager interactive={!touch} title="The AwaFund member app, running live with demo data" />
           {touch && (
             <a href="/f/demo-member/portal" className="absolute inset-0" aria-label="Open the member app demo">
               <span className="sr-only">Open the member app demo</span>
@@ -189,7 +189,7 @@ function LiveStage() {
               <span className={clsx("flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-lg [&>svg]:size-5", tone)}>{icon}</span>
               <span className="min-w-0">
                 <span className="line-clamp-2 text-sm leading-snug font-semibold">{f.summary}</span>
-                <span className="block truncate text-xs text-white/60">{f.actorName ?? "Fundly"}</span>
+                <span className="block truncate text-xs text-white/60">{f.actorName ?? "AwaFund"}</span>
               </span>
             </div>
           );

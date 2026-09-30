@@ -3,7 +3,7 @@
 # Migrations run automatically on start; the public URL is picked up from RENDER_EXTERNAL_URL.
 services:
   - type: web
-    name: fundly
+    name: awafund
     runtime: docker
     plan: free
     region: frankfurt
@@ -14,7 +14,7 @@ services:
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: fundly-db
+          name: awafund-db
           property: connectionString
       # Simulated payments until you add Paystack keys (then set PAYMENT_PROVIDER=paystack).
       - key: PAYMENT_PROVIDER
@@ -34,13 +34,13 @@ services:
       # Optional: AI-written credit narratives.
       - key: ANTHROPIC_API_KEY
         sync: false
-      # Optional: set when you add a custom domain, e.g. https://fundly.app
+      # Optional: set when you add a custom domain, e.g. https://awafund.app
       - key: APP_URL
         sync: false
 
 databases:
-  - name: fundly-db
+  - name: awafund-db
     plan: free
     region: frankfurt
-    databaseName: fundly
-    user: fundly
+    databaseName: awafund
+    user: awafund

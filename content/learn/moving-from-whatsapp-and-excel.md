@@ -94,4 +94,4 @@ Use the "welcome a new member" message in our [WhatsApp templates](/learn/whatsa
 | 3 | Final import; reconcile opening balances; invite officials |
 | 4 | Invite all members; run parallel with the spreadsheet; review at month end |
 
-[Fundly](/signup) has a guided CSV import for members and contribution history with a validation dry run, and posts imported history into the books so your opening position is right from day one. See also [spreadsheet vs software](/learn/spreadsheet-vs-software-group-records).
+[AwaFund](/signup) has a guided CSV import for members and contribution history with a validation dry run, and posts imported history into the books so your opening position is right from day one. See also [spreadsheet vs software](/learn/spreadsheet-vs-software-group-records).

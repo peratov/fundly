@@ -94,7 +94,7 @@ adminRoutes.get("/leads", async (c) => {
 adminRoutes.get("/leads.csv", async (c) => {
   const rows = await c.get("deps").db.select().from(leads).orderBy(desc(leads.createdAt));
   c.header("Content-Type", "text/csv; charset=utf-8");
-  c.header("Content-Disposition", `attachment; filename="fundly-leads.csv"`);
+  c.header("Content-Disposition", `attachment; filename="awafund-leads.csv"`);
   return c.body(
     "﻿" +
       toCsvLine(["email", "name", "phone", "source", "marketing_consent", "converted", "created_at", "details"]) +

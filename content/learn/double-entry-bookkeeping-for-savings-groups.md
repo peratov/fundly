@@ -99,4 +99,4 @@ Not for day-to-day bookkeeping, if your system records the pairs for you. Many g
 - **Treating the whole repayment as principal.** Interest income disappears from reports and dividends are understated.
 - **Deleting wrong entries.** Always reverse and re-enter instead.
 
-[Fundly](/signup) keeps double-entry books automatically: every contribution, loan, repayment, penalty, welfare payout and correction posts balanced entries in the background, and the reports and trial balance come straight from the journal.
+[AwaFund](/signup) keeps double-entry books automatically: every contribution, loan, repayment, penalty, welfare payout and correction posts balanced entries in the background, and the reports and trial balance come straight from the journal.

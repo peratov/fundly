@@ -68,4 +68,4 @@ Keep it to an hour. Anything needing detailed discussion goes to a committee, wh
 
 ## Running the merry-go-round part
 
-For the rotation, keep it simple and transparent: a recorded random draw for the order, one shared calendar, and reminders before each contribution date. You can [plan the rotation for free](/tools/merry-go-round) and share it with the group in a minute. When your chama is ready for loans, shares and welfare in one place, [Fundly](/signup) is built for exactly that.
+For the rotation, keep it simple and transparent: a recorded random draw for the order, one shared calendar, and reminders before each contribution date. You can [plan the rotation for free](/tools/merry-go-round) and share it with the group in a minute. When your chama is ready for loans, shares and welfare in one place, [AwaFund](/signup) is built for exactly that.

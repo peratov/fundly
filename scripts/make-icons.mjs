@@ -1,4 +1,4 @@
-// Draws the Fundly app icons (teal → violet → coral tile with a white "F")
+// Draws the AwaFund app icons (teal → violet → coral tile with a white "A")
 // straight into PNG files, so the repo needs no image tooling.
 import { writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
@@ -17,19 +17,31 @@ function draw(size, { maskable = false } = {}) {
     const cy = Math.min(Math.max(y, radius), size - radius);
     return (x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2;
   };
-  // "F" made of three bars, proportional to the glyph box.
-  const g = (v) => pad + v * (size - pad * 2);
-  const bars = [
-    [g(0.3), g(0.18), g(0.44), g(0.82)],
-    [g(0.3), g(0.18), g(0.74), g(0.32)],
-    [g(0.3), g(0.44), g(0.66), g(0.58)],
+  // "A": two legs meeting at the apex plus a crossbar, drawn as thick line segments
+  // in a unit glyph box (0..1), so it scales cleanly to every icon size.
+  const box = size - pad * 2;
+  const stroke = 0.15;
+  const segs = [
+    [0.5, 0.16, 0.2, 0.86],
+    [0.5, 0.16, 0.8, 0.86],
+    [0.34, 0.6, 0.66, 0.6],
   ];
+  const near = (u, v, [x0, y0, x1, y1]) => {
+    const dx = x1 - x0, dy = y1 - y0;
+    const t = Math.max(0, Math.min(1, ((u - x0) * dx + (v - y0) * dy) / (dx * dx + dy * dy)));
+    return (u - (x0 + t * dx)) ** 2 + (v - (y0 + t * dy)) ** 2 <= (stroke / 2) ** 2;
+  };
+  const glyph = (x, y) => {
+    const u = (x - pad) / box, v = (y - pad) / box;
+    // Flat feet: nothing below the baseline.
+    return v <= 0.86 && segs.some((sg) => near(u, v, sg));
+  };
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const i = (y * size + x) * 4;
       if (!inside(x + 0.5, y + 0.5)) continue;
       const [r, gg, b] = grad((x + y) / (2 * size));
-      const white = bars.some(([x0, y0, x1, y1]) => x >= x0 && x < x1 && y >= y0 && y < y1);
+      const white = glyph(x + 0.5, y + 0.5);
       px[i] = white ? 255 : r;
       px[i + 1] = white ? 255 : gg;
       px[i + 2] = white ? 255 : b;

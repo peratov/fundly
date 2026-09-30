@@ -76,4 +76,4 @@ A merry-go-round moves money *between* members; it doesn't build a shared pot. I
 
 Want the full walkthrough? Read [how to start a merry-go-round with friends](/learn/how-to-start-a-merry-go-round-with-friends), check [whether a merry-go-round is worth it](/learn/is-a-merry-go-round-worth-it) for your position in the order, and learn the [warning signs of merry-go-round scams](/learn/merry-go-round-scams-warning-signs).
 
-You can do steps 3 and 4 in about a minute with Fundly's [free merry-go-round planner](/tools/merry-go-round): add your friends, spin the wheel, and share one link with the group chat.
+You can do steps 3 and 4 in about a minute with AwaFund's [free merry-go-round planner](/tools/merry-go-round): add your friends, spin the wheel, and share one link with the group chat.

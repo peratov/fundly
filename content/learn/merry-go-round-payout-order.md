@@ -24,7 +24,7 @@ Write every name on a slip, or use a digital wheel, and draw in front of the gro
 
 - **Pros:** Nobody can claim favouritism. Fast.
 - **Cons:** Someone with an urgent need might draw last.
-- **Make it trustworthy:** Do it live (in person or on a video call), and record the result immediately in the group chat. Fundly's [free planner](/tools/merry-go-round) uses a cryptographically random spin, then produces a shareable calendar so the result can't be quietly changed.
+- **Make it trustworthy:** Do it live (in person or on a video call), and record the result immediately in the group chat. AwaFund's [free planner](/tools/merry-go-round) uses a cryptographically random spin, then produces a shareable calendar so the result can't be quietly changed.
 
 ## 2. By need
 

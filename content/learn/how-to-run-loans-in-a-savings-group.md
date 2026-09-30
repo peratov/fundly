@@ -89,4 +89,4 @@ Don't lend out everything. Keep enough cash for expected welfare claims and with
 
 Go deeper on each part: [setting loan limits](/learn/setting-loan-limits-for-members), [guarantors](/learn/guarantors-in-group-lending), the [loan application and approval process](/learn/loan-application-and-approval-process) and [handling bad loans](/learn/writing-off-bad-loans-and-provisions).
 
-[Fundly](/signup) runs this whole flow: members apply from their phones and see their eligibility checklist and limit, the committee reviews with the applicant's credit profile alongside, the manager approves, the schedule is generated, and repayments split themselves into principal, interest and penalties in the books.
+[AwaFund](/signup) runs this whole flow: members apply from their phones and see their eligibility checklist and limit, the committee reviews with the applicant's credit profile alongside, the manager approves, the schedule is generated, and repayments split themselves into principal, interest and penalties in the books.

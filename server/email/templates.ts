@@ -18,12 +18,12 @@ function layout(title: string, body: string) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ea;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden">
 <tr><td style="background:#0b1020;background-image:linear-gradient(135deg,#0f766e,#7c3aed 55%,#f04e2e);padding:28px 28px 24px;color:#ffffff">
-<div style="font-size:20px;font-weight:800;letter-spacing:-0.3px">Fundly</div>
+<div style="font-size:20px;font-weight:800;letter-spacing:-0.3px">AwaFund</div>
 <div style="margin-top:14px;font-size:24px;line-height:1.25;font-weight:800">${esc(title)}</div>
 </td></tr>
 <tr><td style="padding:28px">${body}</td></tr>
 <tr><td style="padding:18px 28px;background:#fbfaf7;color:#64748b;font-size:12px;line-height:1.5">
-You're receiving this because this email address was used to organise a merry-go-round on Fundly. It's a one-off service email, not a newsletter.
+You're receiving this because this email address was used to organise a merry-go-round on AwaFund. It's a one-off service email, not a newsletter.
 </td></tr>
 </table></td></tr></table></body></html>`;
 }
@@ -73,7 +73,7 @@ ${button(input.shareUrl, "View the shared page", "#0f766e")}
 </div>
 <div style="font-weight:800;font-size:15px;margin-bottom:6px">Payout order</div>
 ${sched.html}
-<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#475569">Outgrowing the group chat? <a href="${esc(input.appUrl)}" style="color:#7c3aed;font-weight:700">Fundly</a> runs full savings funds with loans, welfare cover and mobile money collection.</p>`,
+<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#475569">Outgrowing the group chat? <a href="${esc(input.appUrl)}" style="color:#7c3aed;font-weight:700">AwaFund</a> runs full savings funds with loans, welfare cover and mobile money collection.</p>`,
   );
 
   const text = [
@@ -92,7 +92,7 @@ ${sched.html}
     ``,
     `First payout: ${sched.byId.get(first.recipientId)} on ${date(first.date)}.`,
     ``,
-    `— Fundly`,
+    `— AwaFund`,
   ].join("\n");
 
   return { subject: `Your organiser link for "${circle.name}"`, html, text };

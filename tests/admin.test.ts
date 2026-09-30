@@ -175,18 +175,18 @@ describe("scheduled jobs endpoint", () => {
 describe("platform admin access", () => {
   it("revokes operator access as soon as an email leaves PLATFORM_ADMIN_EMAILS", async () => {
     const sneaky = client(env);
-    await sneaky.post("/api/auth/signup", { name: "Former Operator", email: "former@fundly.test", password: "former-password-1", fund: { name: "Former Ops", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
+    await sneaky.post("/api/auth/signup", { name: "Former Operator", email: "former@awafund.test", password: "former-password-1", fund: { name: "Former Ops", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
     // Flagged as admin in the database (e.g. from an older config), but not in the current list.
-    await env.handle.db.update(users).set({ isPlatformAdmin: true }).where(eq(users.email, "former@fundly.test"));
+    await env.handle.db.update(users).set({ isPlatformAdmin: true }).where(eq(users.email, "former@awafund.test"));
     expect((await sneaky.get("/api/admin/tenants")).status).toBe(403);
     expect((await sneaky.get("/api/auth/me")).body.user.isPlatformAdmin).toBe(false);
-    const [u] = await env.handle.db.select().from(users).where(eq(users.email, "former@fundly.test"));
+    const [u] = await env.handle.db.select().from(users).where(eq(users.email, "former@awafund.test"));
     expect(u.isPlatformAdmin).toBe(false);
   });
 
   it("lets an operator change a fund's status and records it in the fund's audit log", async () => {
     const root = client(env);
-    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@fundly.test", password: "root-password-1", fund: { name: "Ops Sandbox", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
+    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@awafund.test", password: "root-password-1", fund: { name: "Ops Sandbox", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
     const r = await root.patch(`/api/admin/tenants/${tenantId}`, { status: "suspended" });
     expect(r.status, r.text).toBe(200);
     expect((await owner.post(`${base}/members`, { name: "Blocked Write", joinedOn: "2026-01-01" })).status).toBe(402);

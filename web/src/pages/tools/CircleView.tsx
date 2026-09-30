@@ -339,7 +339,7 @@ export default function CircleView() {
                   <p className="mt-5 font-display text-2xl leading-tight font-extrabold">Ready for more than a merry-go-round?</p>
                   <p className="mt-2 text-sm text-white/70">Turn this circle into a proper fund: savings that earn shares, loans between friends, welfare cover and mobile money collection.</p>
                   <Link to={`/signup?${new URLSearchParams({ currency: c.currency, dues: String(c.amountMinor / 100), fund: c.name })}`} className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
-                    Upgrade to a Fundly fund <ArrowRight className="size-4" />
+                    Upgrade to a AwaFund fund <ArrowRight className="size-4" />
                   </Link>
                   <p className="mt-2 text-xs text-white/40">14 days free · your circle stays free forever</p>
                 </>
@@ -379,7 +379,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
         Made with the free merry-go-round planner from{" "}
         <Link to="/" className="font-semibold text-slate-800 hover:underline">
-          Fundly
+          AwaFund
         </Link>
       </footer>
     </div>

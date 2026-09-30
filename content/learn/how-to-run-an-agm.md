@@ -88,4 +88,4 @@ Propose how much of the year's income to distribute, how much to keep (for examp
 
 Minutes don't need to be long, but they must record **decisions**: who was elected, what dividend was approved, which rules changed, and the vote counts. Share them within two weeks, and keep them with the fund's records — the next audit will need them.
 
-With [Fundly](/signup), the financial report for any period comes straight from the books, the audit committee has its own read-only access, and members can check their own balances before the meeting — so the AGM can focus on decisions, not arguments about numbers.
+With [AwaFund](/signup), the financial report for any period comes straight from the books, the audit committee has its own read-only access, and members can check their own balances before the meeting — so the AGM can focus on decisions, not arguments about numbers.

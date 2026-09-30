@@ -7,7 +7,7 @@ import { Simulator } from "./landing/Simulator";
 
 export default function Landing() {
   useEffect(() => {
-    document.title = "Fundly — run your group fund like a real bank";
+    document.title = "AwaFund — run your group fund like a real bank";
     // The marketing site has its own designed light/dark rhythm; don't let the app theme repaint it.
     const root = document.documentElement;
     const wasDark = root.classList.contains("dark");

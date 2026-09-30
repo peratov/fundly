@@ -42,7 +42,7 @@ function siteApp() {
 
 // Built once per instance and reused across requests. Migrations run at build time, not here.
 const ready = import("../../server/bootstrap").then((m) => m.bootstrap({ migrate: false, serverless: true }));
-ready.catch((err) => console.error("[fundly] startup failed:", err));
+ready.catch((err) => console.error("[awafund] startup failed:", err));
 
 export default getRequestListener(async (incoming) => {
   let req = incoming;

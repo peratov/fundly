@@ -71,6 +71,6 @@ Most missed payments are forgotten, not refused. A well-timed, friendly message 
 
 ## Make reminders automatic
 
-Writing reminders by hand every month gets old fast. The [free merry-go-round planner](/tools/merry-go-round) has a one-tap "Remind on WhatsApp" button that lists exactly who still owes for each round. In [Fundly](/signup), the member-detail page drafts personalised reminders using each member's real figures — missed months, loan balance or welfare package.
+Writing reminders by hand every month gets old fast. The [free merry-go-round planner](/tools/merry-go-round) has a one-tap "Remind on WhatsApp" button that lists exactly who still owes for each round. In [AwaFund](/signup), the member-detail page drafts personalised reminders using each member's real figures — missed months, loan balance or welfare package.
 
 See also: [what to do when a member doesn't pay](/learn/when-a-member-doesnt-pay).

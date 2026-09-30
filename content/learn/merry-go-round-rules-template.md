@@ -63,4 +63,4 @@ The template above covers all four.
 
 ## Make the rules easy to follow
 
-Rules only work if everyone can see where they stand. Share one calendar showing the order and dates, and tick off payments as they arrive. Fundly's [free merry-go-round planner](/tools/merry-go-round) does both: spin for the order, then share a link where the organiser can mark who's paid and send WhatsApp reminders to anyone who hasn't.
+Rules only work if everyone can see where they stand. Share one calendar showing the order and dates, and tick off payments as they arrive. AwaFund's [free merry-go-round planner](/tools/merry-go-round) does both: spin for the order, then share a link where the organiser can mark who's paid and send WhatsApp reminders to anyone who hasn't.

@@ -61,4 +61,4 @@ Diaspora members sometimes feel they pay in but have less say; home members some
 
 See also the [savings group glossary](/learn/glossary) if members abroad are new to some of the terms your group uses.
 
-[Fundly](/signup) gives every member — wherever they live — their own portal with balances, loan applications and welfare claims, and keeps the books in your fund's currency.
+[AwaFund](/signup) gives every member — wherever they live — their own portal with balances, loan applications and welfare claims, and keeps the books in your fund's currency.

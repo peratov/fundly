@@ -77,7 +77,7 @@ describe("public circle API", () => {
   it("upserts one lead per email and shows it to platform admins, and records conversion on signup", async () => {
     await raw("POST", "/api/public/circles", { circle: { ...circle, name: "Second circle" }, organizer: { name: "Ama M.", email: "ama@example.com" } });
     const root = client(env);
-    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@fundly.test", password: "root-password-1", fund: { name: "Ops Fund", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
+    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@awafund.test", password: "root-password-1", fund: { name: "Ops Fund", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
     let leads = await root.get("/api/admin/leads");
     expect(leads.status).toBe(200);
     expect(leads.body.total).toBe(1);

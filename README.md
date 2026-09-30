@@ -1,4 +1,4 @@
-# Fundly
+# AwaFund
 
 Savings, loans and welfare management for alumni associations, susu groups and community funds — a multi-tenant SaaS. This is a ground-up rebuild of the *Dzolali'09 Fund* prototype.
 
@@ -10,9 +10,9 @@ npm run db:seed     # optional: demo fund "Dzolali'09" with ~7 years of history
 npm run dev         # API on :3000, web on http://localhost:5173
 ```
 
-No database install is needed for development: Fundly uses [PGlite](https://pglite.dev) (real Postgres compiled to WASM) stored in `./.data`. Set `DATABASE_URL` to use a real Postgres instead — same schema, same migrations.
+No database install is needed for development: AwaFund uses [PGlite](https://pglite.dev) (real Postgres compiled to WASM) stored in `./.data`. Set `DATABASE_URL` to use a real Postgres instead — same schema, same migrations.
 
-Demo logins (password `fundly-demo`): `mawuli@dzolali.test` (owner/manager), `abigail@dzolali.test` (credit committee), `senyo@dzolali.test` (audit committee), `edem@dzolali.test` / `peace@dzolali.test` (members).
+Demo logins (password `awafund-demo`): `mawuli@dzolali.test` (owner/manager), `abigail@dzolali.test` (credit committee), `senyo@dzolali.test` (audit committee), `edem@dzolali.test` / `peace@dzolali.test` (members).
 
 | Command | |
 |---|---|
@@ -81,7 +81,7 @@ Interest and penalties are recognised when collected (cash basis). Repayments cl
 
 `/tools/merry-go-round` is a free, no-signup tool for friends running a rotating savings circle (susu, chama, esusu). Visitors add friends, spin a wheel for the payout order and get a payout calendar. Planning happens entirely in the browser; **saving and sharing** asks for name + email (marketing opt-in is a separate, unticked checkbox) and creates:
 
-- a public share link `/c/:slug` for the group chat (read-only, with an "upgrade to Fundly" call to action), and
+- a public share link `/c/:slug` for the group chat (read-only, with an "upgrade to AwaFund" call to action), and
 - a private organiser link (`#edit=<token>` in the URL fragment, stored hashed server-side) for ticking off payments and sending WhatsApp reminders.
 
 Saving emails the organiser both links. Only a hash of the edit token is stored, so a lost link can't be re-sent; instead **"Email me my organiser link"** (on the planner and on every circle page) issues a fresh extra token for each circle tied to that email. Old links keep working, and the response is identical for unknown emails, so it can't be used to discover who organises what. Emailed links always use `APP_URL`, never the request's Host header.
@@ -92,7 +92,7 @@ Leads land in the `leads` table (one row per email and source) and are listed wi
 
 ## Live product previews and the no-signup demo
 
-The homepage shows the real app, not mock-ups. The phone in the hero and the product tour are the actual Fundly screens running in iframes. You can also open the demo directly at `/f/demo/overview` (a fund owner's view) or `/f/demo-member/portal` (a member's view). No account is needed.
+The homepage shows the real app, not mock-ups. The phone in the hero and the product tour are the actual AwaFund screens running in iframes. You can also open the demo directly at `/f/demo/overview` (a fund owner's view) or `/f/demo-member/portal` (a member's view). No account is needed.
 
 - **How it works:** any page under `/f/demo` runs in demo mode (`web/src/demo/demo.ts`). API calls are answered from a snapshot, `web/public/demo/fixtures.json`, instead of the server. Nothing is sent to the server or saved, and actions that would change data show a "this is a demo" message.
 - **Where the snapshot comes from:** it's captured from the real API. So when a screen or response changes, refresh it:

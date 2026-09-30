@@ -75,13 +75,13 @@ export function toIcs(input: { name: string; currencyLabel: (m: number) => strin
   const byId = new Map(input.members.map((m) => [m.id, m.name]));
   const esc = (s: string) => s.replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n");
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Fundly//Merry-go-round//EN", "CALSCALE:GREGORIAN"];
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AwaFund//Merry-go-round//EN", "CALSCALE:GREGORIAN"];
   for (const r of input.schedule) {
     const d = r.date.replace(/-/g, "");
     const next = addDays(r.date, 1).replace(/-/g, "");
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${input.name.replace(/\W+/g, "-")}-${r.index}-${d}@fundly`,
+      `UID:${input.name.replace(/\W+/g, "-")}-${r.index}-${d}@awafund`,
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${d}`,
       `DTEND;VALUE=DATE:${next}`,

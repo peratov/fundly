@@ -74,4 +74,4 @@ Most discrepancies aren't theft. Typical innocent causes:
 
 That's why the controls above protect honest officials too: with traceable payments, an audit trail and monthly reconciliation, a mistake is found in days and fixed with a correcting entry — instead of surfacing a year later as a suspicion nobody can disprove.
 
-[Fundly](/signup) builds most of these controls in: role-based access, member-visible records, an append-only audit log, double-entry books, no self-approval, and mobile money that posts itself.
+[AwaFund](/signup) builds most of these controls in: role-based access, member-visible records, an append-only audit log, double-entry books, no self-approval, and mobile money that posts itself.

@@ -75,32 +75,32 @@ const PAIRS = [
 ];
 
 export function Compare() {
-  const [fundly, setFundly] = useState(true);
+  const [awafund, setAwaFund] = useState(true);
   return (
     <section className="bg-noise relative overflow-hidden bg-ink-950 py-24 text-white sm:py-32">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className={clsx("absolute top-0 left-1/2 size-[40rem] -translate-x-1/2 rounded-full blur-[140px] transition-colors duration-700", fundly ? "bg-brand-500/25" : "bg-rose-600/20")} />
+        <div className={clsx("absolute top-0 left-1/2 size-[40rem] -translate-x-1/2 rounded-full blur-[140px] transition-colors duration-700", awafund ? "bg-brand-500/25" : "bg-rose-600/20")} />
       </div>
       <div className="relative mx-auto max-w-4xl px-4 sm:px-8">
         <Reveal className="text-center">
           <h2 className="font-display text-4xl font-extrabold tracking-tight sm:text-6xl">Sound familiar?</h2>
           <div className="mt-8 inline-flex rounded-full bg-white/10 p-1.5 ring-1 ring-white/15">
-            <button onClick={() => setFundly(false)} className={clsx("flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition", !fundly ? "bg-rose-500 text-white shadow-lg" : "text-white/60")}>
+            <button onClick={() => setAwaFund(false)} className={clsx("flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition", !awafund ? "bg-rose-500 text-white shadow-lg" : "text-white/60")}>
               <FileSpreadsheet className="size-4" /> The old way
             </button>
-            <button onClick={() => setFundly(true)} className={clsx("flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition", fundly ? "bg-brand-500 text-ink-950 shadow-lg" : "text-white/60")}>
-              <Check className="size-4" /> With Fundly
+            <button onClick={() => setAwaFund(true)} className={clsx("flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition", awafund ? "bg-brand-500 text-ink-950 shadow-lg" : "text-white/60")}>
+              <Check className="size-4" /> With AwaFund
             </button>
           </div>
         </Reveal>
         <ul className="mt-12 space-y-3">
           {PAIRS.map(([old, neu], i) => (
             <li key={i} className="glass flex items-center gap-4 overflow-hidden rounded-2xl px-5 py-4">
-              <span className={clsx("flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-500", fundly ? "bg-brand-500 text-ink-950" : "bg-rose-500/80 text-white")}>
-                {fundly ? <Check className="size-5" /> : i === 1 ? <MessageCircleWarning className="size-5" /> : <X className="size-5" />}
+              <span className={clsx("flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-500", awafund ? "bg-brand-500 text-ink-950" : "bg-rose-500/80 text-white")}>
+                {awafund ? <Check className="size-5" /> : i === 1 ? <MessageCircleWarning className="size-5" /> : <X className="size-5" />}
               </span>
-              <span key={String(fundly)} className="animate-pop text-base font-medium sm:text-lg" style={{ animationDelay: `${i * 60}ms` }}>
-                {fundly ? neu : old}
+              <span key={String(awafund)} className="animate-pop text-base font-medium sm:text-lg" style={{ animationDelay: `${i * 60}ms` }}>
+                {awafund ? neu : old}
               </span>
             </li>
           ))}
@@ -138,7 +138,7 @@ export function Pricing() {
             <div className="relative rounded-[calc(2rem-2px)] bg-ink-950 p-8 text-white sm:p-10">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="font-display text-2xl font-bold">Fundly Standard</p>
+                  <p className="font-display text-2xl font-bold">AwaFund Standard</p>
                   <p className="mt-1 text-sm text-white/50">For one fund, unlimited members</p>
                 </div>
                 <span className="rounded-full bg-coral-500 px-3 py-1 text-xs font-bold">Most groups</span>
@@ -175,7 +175,8 @@ export function Pricing() {
 // ---------------------------------------------------------------- FAQ
 
 const FAQS = [
-  ["Is our money held by Fundly?", "No. Fundly is the record-keeping and collection layer. Money stays in your fund's accounts; mobile money payments settle through the payment provider to your group."],
+  ["What does AwaFund mean?", "Àwa means \"we\" or \"us\" in Yoruba, so AwaFund is simply \"our fund\": money a group saves, lends and protects together, with books every member can trust."],
+  ["Is our money held by AwaFund?", "No. AwaFund is the record-keeping and collection layer. Money stays in your fund's accounts; mobile money payments settle through the payment provider to your group."],
   ["We already have years of records in Excel. Can we bring them?", "Yes. Import members and contribution history from CSV. Every row is validated first and the whole file is saved together or not at all, so you never end up half-imported."],
   ["Who can see what?", "Members see only their own savings, loans and claims. Managers run the fund, the credit committee reviews loans, and the audit committee gets read-only access to everything plus the audit log."],
   ["How are loan limits and credit scores worked out?", "From five transparent habits: how long someone has been a member, contribution size, regularity, past loan repayment and meeting attendance. Your fund sets the thresholds."],
@@ -272,11 +273,14 @@ export function Footer() {
           <Link to="/login" className="hover:text-white">
             Sign in
           </Link>
-<a href="/f/demo/overview" className="hover:text-white">
+          <a href="/f/demo/overview" className="hover:text-white">
             Demo
           </a>
         </nav>
-        <p className="text-sm">© {new Date().getFullYear()} Fundly</p>
+        <p className="text-center text-sm sm:text-right">
+          © {new Date().getFullYear()} AwaFund
+          <span className="block text-xs text-white/35">Àwa means "we" in Yoruba. Our fund, together.</span>
+        </p>
       </div>
     </footer>
   );

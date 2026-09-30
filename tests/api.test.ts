@@ -289,7 +289,7 @@ describe("subscriptions & platform admin", () => {
   it("only platform admins reach the operator console", async () => {
     expect((await owner.get("/api/admin/tenants")).status).toBe(403);
     const root = client(env);
-    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@fund.test".replace("fund", "fundly"), password: "root-password-1", fund: { name: "Ops Sandbox", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
+    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@fund.test".replace("fund", "awafund"), password: "root-password-1", fund: { name: "Ops Sandbox", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
     const list = await root.get("/api/admin/tenants");
     expect(list.status).toBe(200);
     expect(list.body.stats.funds).toBeGreaterThanOrEqual(3);

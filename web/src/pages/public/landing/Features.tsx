@@ -5,7 +5,7 @@ import { Reveal } from "../../../lib/motion";
 import { LiveScreen } from "./LiveScreen";
 
 /*
- * A tour of the real product. Every screen below is the actual Fundly app running
+ * A tour of the real product. Every screen below is the actual AwaFund app running
  * in demo mode on a snapshot of the demo fund (see web/src/demo/demo.ts).
  */
 
@@ -92,7 +92,7 @@ function PhoneFrame({ src, interactive }: { src: string; interactive: boolean })
   return (
     <div className="mx-auto w-[min(19rem,100%)] rounded-[2.4rem] bg-gradient-to-b from-slate-700 to-slate-900 p-2.5 shadow-2xl shadow-slate-900/30 ring-1 ring-slate-900/10">
       <div className="relative overflow-hidden rounded-[1.9rem]">
-        <LiveScreen key={src} src={src} width={390} height={780} interactive={interactive} title="Fundly member app, live demo" />
+        <LiveScreen key={src} src={src} width={390} height={780} interactive={interactive} title="AwaFund member app, live demo" />
         {!interactive && <OpenOverlay src={src} />}
       </div>
     </div>
@@ -119,7 +119,7 @@ function BrowserFrame({ stop }: { stop: Stop }) {
           <span className="size-3 rounded-full bg-amber-400" />
           <span className="size-3 rounded-full bg-emerald-400" />
         </span>
-        <span className="min-w-0 flex-1 truncate rounded-md bg-white px-3 py-1 text-center text-xs text-slate-500 dark:bg-slate-900">app.fundly · {stop.title}</span>
+        <span className="min-w-0 flex-1 truncate rounded-md bg-white px-3 py-1 text-center text-xs text-slate-500 dark:bg-slate-900">awafund.app · {stop.title}</span>
         <a href={stop.src} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300">
           Full screen <ArrowUpRight className="size-3.5" />
         </a>
@@ -129,7 +129,7 @@ function BrowserFrame({ stop }: { stop: Stop }) {
           <PhoneFrame src={stop.src} interactive />
         </div>
       ) : (
-        <LiveScreen key={stop.src} src={stop.src} width={1100} height={740} title={`Fundly: ${stop.title} (live demo)`} />
+        <LiveScreen key={stop.src} src={stop.src} width={1100} height={740} title={`AwaFund: ${stop.title} (live demo)`} />
       )}
     </div>
   );
@@ -198,7 +198,7 @@ export function Features() {
             Serious money tools. <span className="bg-gradient-to-r from-coral-500 to-grape-600 bg-clip-text text-transparent">Surprisingly fun to use.</span>
           </h2>
           <p className="mt-5 text-lg text-slate-600 dark:text-slate-400">
-            Every screen below is Fundly itself, running on a demo fund with seven years of history. Click around: nothing you do is saved.{" "}
+            Every screen below is AwaFund itself, running on a demo fund with seven years of history. Click around: nothing you do is saved.{" "}
             <a href="/f/demo/overview" className="font-semibold text-brand-700 hover:underline dark:text-brand-300">
               Open the full demo →
             </a>

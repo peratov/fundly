@@ -84,4 +84,4 @@ Write a one-page summary for the AGM: opening and closing cash, contributions re
 
 An audit that finds small issues and fixes them is a success, not a failure. Report findings calmly, with recommendations and a date for follow-up.
 
-With [Fundly](/signup), the audit committee gets its own read-only role with the books, the full audit log and CSV exports of everything — most of this checklist becomes a morning's work.
+With [AwaFund](/signup), the audit committee gets its own read-only role with the books, the full audit log and CSV exports of everything — most of this checklist becomes a morning's work.

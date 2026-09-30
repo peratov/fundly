@@ -34,7 +34,7 @@ export default function AcceptInvite() {
 
   const d = invite.data;
   return (
-    <AuthLayout title={`Join ${d.fundName}`} subtitle={`Hi ${d.memberName.split(" ")[0]} — ${d.existingAccount ? "sign in with your existing Fundly password to link this fund." : "choose a password to activate your member account."}`}>
+    <AuthLayout title={`Join ${d.fundName}`} subtitle={`Hi ${d.memberName.split(" ")[0]} — ${d.existingAccount ? "sign in with your existing AwaFund password to link this fund." : "choose a password to activate your member account."}`}>
       <form
         className="space-y-4"
         onSubmit={(e) => {

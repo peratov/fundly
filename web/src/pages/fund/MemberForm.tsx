@@ -145,7 +145,7 @@ export function InviteLinkModal({ url, name, onClose }: { url: string | null; na
         </Button>
       </div>
       {url && (
-        <a className="mt-3 inline-block text-sm font-medium text-emerald-700" href={`https://wa.me/?text=${encodeURIComponent(`You're invited to join our fund on Fundly: ${url}`)}`} target="_blank" rel="noreferrer">
+        <a className="mt-3 inline-block text-sm font-medium text-emerald-700" href={`https://wa.me/?text=${encodeURIComponent(`You're invited to join our fund on AwaFund: ${url}`)}`} target="_blank" rel="noreferrer">
           Share on WhatsApp →
         </a>
       )}

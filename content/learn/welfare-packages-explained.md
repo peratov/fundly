@@ -67,4 +67,4 @@ In this example, premiums alone cover less than a third of expected claims. The 
 - **Case-by-case amounts.** Fixed limits per package avoid accusations of favouritism.
 - **Mixing welfare money with savings or loans.** The reserve should never be lent out.
 
-[Fundly](/signup) lets you define your own packages and limits. Members see their remaining cover, file claims from their phone, and payouts come straight out of the welfare reserve in the books. For the bigger picture, see [how to start an alumni welfare fund](/learn/how-to-start-an-alumni-welfare-fund).
+[AwaFund](/signup) lets you define your own packages and limits. Members see their remaining cover, file claims from their phone, and payouts come straight out of the welfare reserve in the books. For the bigger picture, see [how to start an alumni welfare fund](/learn/how-to-start-an-alumni-welfare-fund).

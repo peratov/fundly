@@ -71,4 +71,4 @@ Both Edem and Peace have GHS 4,000 in savings.
 
 With a 3× multiplier, Edem's limit is capped at the fund's maximum; Peace's would be lower — and, more importantly, her overdue loan means she isn't eligible for a new one until it's back on track. Both can see exactly why.
 
-[Fundly](/signup) calculates this score automatically from each member's real record, shows members their own breakdown and limit, and gives the credit committee the full profile on every application.
+[AwaFund](/signup) calculates this score automatically from each member's real record, shows members their own breakdown and limit, and gives the credit committee the full profile on every application.

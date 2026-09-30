@@ -80,4 +80,4 @@ Everyone pays GHS 3,000 over the ten months and receives GHS 3,000 — but most 
 
 ## Going further: an education loan fund
 
-Some parent groups graduate to a fund with an **education loan** product: members save monthly and borrow at a low rate when fees are due. See [how to run loans in a savings group](/learn/how-to-run-loans-in-a-savings-group) — or [set one up on Fundly](/signup).
+Some parent groups graduate to a fund with an **education loan** product: members save monthly and borrow at a low rate when fees are due. See [how to run loans in a savings group](/learn/how-to-run-loans-in-a-savings-group) — or [set one up on AwaFund](/signup).

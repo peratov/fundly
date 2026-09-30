@@ -78,4 +78,4 @@ Make it as safe as possible:
 - **Reconcile monthly** against statements, and write down who checked it.
 - **Share a read-only summary** with members every month.
 
-Our [migration guide](/learn/moving-from-whatsapp-and-excel) walks through each step. [Fundly](/signup) imports members and contribution history from CSV, validates every row first, and posts the history into double-entry books so your opening position is right from day one.
+Our [migration guide](/learn/moving-from-whatsapp-and-excel) walks through each step. [AwaFund](/signup) imports members and contribution history from CSV, validates every row first, and posts the history into double-entry books so your opening position is right from day one.

@@ -22,7 +22,7 @@ export interface PageMeta {
   updated?: string;
 }
 
-const ORG = (base: string) => ({ "@type": "Organization", name: "Fundly", url: base, logo: `${base}/icons/icon-512.png` });
+const ORG = (base: string) => ({ "@type": "Organization", name: "AwaFund", url: base, logo: `${base}/icons/icon-512.png` });
 
 function head(m: PageMeta) {
   const url = `${m.base}${m.path}`;
@@ -36,7 +36,7 @@ function head(m: PageMeta) {
 <link rel="canonical" href="${esc(url)}">
 ${m.noindex ? '<meta name="robots" content="noindex, follow">' : '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">'}
 <meta name="theme-color" content="#060913">
-<meta property="og:site_name" content="Fundly">
+<meta property="og:site_name" content="AwaFund">
 <meta property="og:type" content="${m.type ?? "website"}">
 <meta property="og:title" content="${esc(m.title)}">
 <meta property="og:description" content="${esc(m.description)}">
@@ -47,7 +47,7 @@ ${m.noindex ? '<meta name="robots" content="noindex, follow">' : '<meta name="ro
 <meta name="twitter:description" content="${esc(m.description)}">
 ${m.published ? `<meta property="article:published_time" content="${m.published}">` : ""}
 ${m.updated ? `<meta property="article:modified_time" content="${m.updated}">` : ""}
-<link rel="alternate" type="application/rss+xml" title="Fundly Learn" href="${m.base}/learn/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="AwaFund Learn" href="${m.base}/learn/rss.xml">
 <link rel="icon" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,7 +64,7 @@ function shell(m: PageMeta, main: string) {
 <a class="skip" href="#main">Skip to content</a>
 <header class="site">
   <div class="wrap bar">
-    <a class="logo" href="/"><span class="mark" aria-hidden="true">F</span>Fundly</a>
+    <a class="logo" href="/"><span class="mark" aria-hidden="true">A</span>AwaFund</a>
     <nav aria-label="Site">
       <a href="/learn">Learn</a>
       <a href="/tools/merry-go-round" class="hide-sm">Free planner</a>
@@ -79,7 +79,7 @@ ${main}
 <footer class="site">
   <div class="wrap foot">
     <div>
-      <a class="logo" href="/"><span class="mark" aria-hidden="true">F</span>Fundly</a>
+      <a class="logo" href="/"><span class="mark" aria-hidden="true">A</span>AwaFund</a>
       <p>Savings, loans and welfare software for alumni associations, susu groups and community funds.</p>
     </div>
     <nav aria-label="Knowledge base">
@@ -95,7 +95,7 @@ ${main}
       <a href="/login">Sign in</a>
     </nav>
   </div>
-  <p class="wrap fine">Guides are general information, not financial or legal advice. © ${new Date().getFullYear()} Fundly · <a href="/learn/rss.xml">RSS</a></p>
+  <p class="wrap fine">Guides are general information, not financial or legal advice. © ${new Date().getFullYear()} AwaFund · <a href="/learn/rss.xml">RSS</a></p>
 </footer>
 </body>
 </html>`;
@@ -133,7 +133,7 @@ const CTA_TOOL = `<aside class="cta-box">
 </aside>`;
 
 const CTA_FUND = `<aside class="cta-box alt">
-<p class="kicker">Fundly</p>
+<p class="kicker">AwaFund</p>
 <h2>Run your group fund like a real bank</h2>
 <p>Dues by mobile money, fair loans, welfare cover and books that always balance. 14 days free.</p>
 <a class="btn" href="/signup">Start your fund free →</a>
@@ -145,7 +145,7 @@ export function indexPage(all: Article[], base: string) {
   const featured = all.filter((a) => a.featured);
   const latest = all.slice(0, 9);
   const m: PageMeta = {
-    title: "Fundly Learn — guides for susu, chama, merry-go-rounds and group savings funds",
+    title: "AwaFund Learn — guides for susu, chama, merry-go-rounds and group savings funds",
     description: "Free, practical guides for running merry-go-rounds, susu and chama groups, alumni welfare funds and member loans — from payout order to bookkeeping.",
     path: "/learn",
     base,
@@ -153,18 +153,18 @@ export function indexPage(all: Article[], base: string) {
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "Fundly",
+        name: "AwaFund",
         url: base,
         potentialAction: { "@type": "SearchAction", target: `${base}/learn/search?q={search_term_string}`, "query-input": "required name=search_term_string" },
       },
-      { "@context": "https://schema.org", "@type": "CollectionPage", name: "Fundly Learn", url: `${base}/learn`, publisher: ORG(base), hasPart: all.map((a) => ({ "@type": "Article", headline: a.title, url: `${base}/learn/${a.slug}` })) },
+      { "@context": "https://schema.org", "@type": "CollectionPage", name: "AwaFund Learn", url: `${base}/learn`, publisher: ORG(base), hasPart: all.map((a) => ({ "@type": "Article", headline: a.title, url: `${base}/learn/${a.slug}` })) },
     ],
   };
   return shell(
     m,
     `<section class="hero">
   <div class="wrap">
-    <p class="kicker light">Fundly Learn</p>
+    <p class="kicker light">AwaFund Learn</p>
     <h1>Everything you need to run a group fund your members trust</h1>
     <p class="lede">Practical guides for merry-go-rounds, susu and chama groups, alumni welfare funds and member loans. Written in plain English, with templates you can copy.</p>
     ${searchForm("", true)}
@@ -193,7 +193,7 @@ export function categoryPage(key: CategoryKey, all: Article[], base: string) {
   const bc = crumbs([{ name: "Learn", path: "/learn" }, { name: c.name, path }], base);
   return shell(
     {
-      title: `${c.name} guides | Fundly Learn`,
+      title: `${c.name} guides | AwaFund Learn`,
       description: c.blurb,
       path,
       base,
@@ -226,7 +226,7 @@ export function articlePage(a: Article, rel: Article[], base: string) {
       articleSection: c.name,
       keywords: a.tags.join(", "),
       mainEntityOfPage: `${base}${path}`,
-      author: { "@type": "Organization", name: "Fundly editorial team", url: `${base}/learn` },
+      author: { "@type": "Organization", name: "AwaFund editorial team", url: `${base}/learn` },
       publisher: ORG(base),
       image: `${base}/icons/icon-512.png`,
     },
@@ -244,7 +244,7 @@ export function articlePage(a: Article, rel: Article[], base: string) {
     ? `<section class="faqs"><h2 id="faq">Frequently asked questions</h2>${a.faqs.map((f) => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</section>`
     : "";
   return shell(
-    { title: `${a.title} | Fundly Learn`, description: a.description, path, base, type: "article", structured, published: a.published, updated: a.updated },
+    { title: `${a.title} | AwaFund Learn`, description: a.description, path, base, type: "article", structured, published: a.published, updated: a.updated },
     `<article>
 <header class="hero slim" style="--c:${c.color}">
   <div class="wrap narrow">
@@ -252,7 +252,7 @@ export function articlePage(a: Article, rel: Article[], base: string) {
     <a class="pill" style="--c:${c.color}" href="/learn/category/${a.category}">${esc(c.name)}</a>
     <h1>${esc(a.title)}</h1>
     <p class="lede">${esc(a.description)}</p>
-    <p class="byline">By the Fundly editorial team · <time datetime="${a.updated}">Updated ${fmtDate(a.updated)}</time> · ${a.readingMinutes} min read</p>
+    <p class="byline">By the AwaFund editorial team · <time datetime="${a.updated}">Updated ${fmtDate(a.updated)}</time> · ${a.readingMinutes} min read</p>
   </div>
 </header>
 <div class="wrap article-grid">
@@ -271,7 +271,7 @@ ${rel.length ? `<section class="wrap related"><h2 class="section">Keep reading</
 
 export function searchPage(q: string, results: { a: Article; snippet: string }[], all: Article[], base: string) {
   return shell(
-    { title: q ? `Search: ${q} | Fundly Learn` : "Search | Fundly Learn", description: "Search Fundly's guides for savings groups.", path: `/learn/search`, base, noindex: true },
+    { title: q ? `Search: ${q} | AwaFund Learn` : "Search | AwaFund Learn", description: "Search AwaFund's guides for savings groups.", path: `/learn/search`, base, noindex: true },
     `<section class="hero slim"><div class="wrap narrow"><h1>${q ? `Results for “${esc(q)}”` : "Search the guides"}</h1>${searchForm(q)}</div></section>
 <div class="wrap narrow block">
 ${
@@ -287,7 +287,7 @@ ${!q ? `<ul class="list">${all.map((a) => `<li><a href="/learn/${a.slug}">${esc(
 
 export function notFoundPage(base: string) {
   return shell(
-    { title: "Guide not found | Fundly Learn", description: "That guide doesn't exist.", path: "/learn", base, noindex: true },
+    { title: "Guide not found | AwaFund Learn", description: "That guide doesn't exist.", path: "/learn", base, noindex: true },
     `<section class="hero slim"><div class="wrap narrow"><h1>We couldn't find that guide</h1><p class="lede">It may have moved. Try searching instead.</p>${searchForm()}</div></section>`,
   );
 }
@@ -314,7 +314,7 @@ export function rssXml(all: Article[], base: string) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title>Fundly Learn</title>
+<title>AwaFund Learn</title>
 <link>${base}/learn</link>
 <atom:link href="${base}/learn/rss.xml" rel="self" type="application/rss+xml"/>
 <description>Guides for merry-go-rounds, susu, chama and group savings funds.</description>

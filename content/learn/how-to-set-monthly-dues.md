@@ -65,4 +65,4 @@ At each AGM, look at the collection rate, welfare claims and loan demand. Raise 
 
 ## Try the numbers
 
-Fundly's [growth simulator](/#simulator) lets you slide member numbers, dues and lending to see how a fund could grow over five years. When you're ready, [start a fund](/signup) and set your minimum dues, due day and welfare premiums in the settings.
+AwaFund's [growth simulator](/#simulator) lets you slide member numbers, dues and lending to see how a fund could grow over five years. When you're ready, [start a fund](/signup) and set your minimum dues, due day and welfare premiums in the settings.

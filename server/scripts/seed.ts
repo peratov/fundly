@@ -25,7 +25,7 @@ if (existsSync(".env")) process.loadEnvFile(".env");
 const config = loadConfig();
 const { db, close } = await openDb({ url: config.databaseUrl, dataDir: config.dataDir });
 
-const PASSWORD = "fundly-demo";
+const PASSWORD = "awafund-demo";
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
 const current = periodOf(now);

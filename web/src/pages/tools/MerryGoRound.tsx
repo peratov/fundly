@@ -55,7 +55,7 @@ export default function MerryGoRound() {
   const [recovering, setRecovering] = useState(false);
 
   useEffect(() => {
-    document.title = "Free merry-go-round planner for friends · Fundly";
+    document.title = "Free merry-go-round planner for friends · AwaFund";
     const root = document.documentElement;
     const wasDark = root.classList.contains("dark");
     root.classList.remove("dark");
@@ -446,7 +446,7 @@ function SaveModal({ circle, onClose, onSaved }: { circle: Circle; onClose: () =
         </label>
         <label className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-400">
           <input type="checkbox" checked={f.consent} onChange={(e) => setF({ ...f, consent: e.target.checked })} className="mt-0.5 size-4 rounded accent-coral-500" />
-          Send me occasional tips for running savings groups and news about Fundly. Unsubscribe anytime.
+          Send me occasional tips for running savings groups and news about AwaFund. Unsubscribe anytime.
         </label>
         {err && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{err}</p>}
         <button type="submit" disabled={!ok || busy} className="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink-950 py-3.5 font-bold text-white transition hover:bg-ink-900 disabled:opacity-40 dark:bg-white dark:text-ink-950">
@@ -484,10 +484,10 @@ function HowItWorksStrip() {
         </div>
         <Reveal className="mt-10 flex flex-col items-center gap-3 rounded-3xl bg-ink-950 p-8 text-center text-white sm:flex-row sm:text-left">
           <p className="flex-1 text-lg">
-            <span className="font-bold">Outgrowing the group chat?</span> <span className="text-white/70">Fundly runs full savings funds with loans, welfare cover and mobile money collection.</span>
+            <span className="font-bold">Outgrowing the group chat?</span> <span className="text-white/70">AwaFund runs full savings funds with loans, welfare cover and mobile money collection.</span>
           </p>
           <Link to="/" className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-white px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
-            See Fundly <ArrowRight className="size-4" />
+            See AwaFund <ArrowRight className="size-4" />
           </Link>
         </Reveal>
       </div>
