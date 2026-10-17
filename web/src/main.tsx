@@ -2,10 +2,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, StrictMode, Suspense, useEffect, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Navigate, RouterProvider, useParams } from "react-router";
-import { AppShell } from "./components/AppShell";
 import { Loading, ToastProvider } from "./components/ui";
 import { ApiError } from "./lib/api";
-import { useFund, useMe } from "./lib/session";
+import { hasSessionHint, useFund, useMe } from "./lib/session";
 import "./styles.css";
 
 try {
@@ -20,6 +19,8 @@ try {
 
 // Route-level code splitting keeps the first load small as the app grows.
 const Landing = lazy(() => import("./pages/public/Landing"));
+// The signed-in shell (navigation, icons, notifications) isn't needed on public pages.
+const AppShell = lazy(() => import("./components/AppShell").then((m) => ({ default: m.AppShell })));
 const Login = lazy(() => import("./pages/public/Login"));
 const Signup = lazy(() => import("./pages/public/Signup"));
 const AcceptInvite = lazy(() => import("./pages/public/AcceptInvite"));
@@ -50,7 +51,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 15_000,
-      retry: (count, err) => !(err instanceof ApiError && err.status < 500) && count < 2,
+      // Client errors and "service unavailable" won't fix themselves in a second; network blips might.
+      retry: (count, err) => !(err instanceof ApiError && (err.status < 500 || err.status === 503)) && count < 2,
       refetchOnWindowFocus: false,
     },
   },
@@ -88,9 +90,10 @@ function Reconnecting({ onRetry, busy }: { onRetry: () => void; busy: boolean })
 
 function Home() {
   const { data: me, isLoading } = useMe();
-  if (isLoading) return <Loading />;
-  if (!me) return <S><Landing /></S>;
-  return <Navigate to="/app" replace />;
+  if (me) return <Navigate to="/app" replace />;
+  // Returning users briefly see a spinner; everyone else gets the landing page immediately.
+  if (isLoading && hasSessionHint()) return <Loading />;
+  return <S><Landing /></S>;
 }
 
 function ChooseFund() {
@@ -130,7 +133,7 @@ const router = createBrowserRouter([
   { path: "/admin", element: <RequireAuth><S><Admin /></S></RequireAuth> },
   {
     path: "/f/:tenantId",
-    element: <RequireAuth><AppShell /></RequireAuth>,
+    element: <RequireAuth><S><AppShell /></S></RequireAuth>,
     children: [
       { index: true, element: <FundHome /> },
       { path: "overview", element: <S><Overview /></S> },

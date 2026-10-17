@@ -23,14 +23,41 @@ export interface Me {
   funds: FundSummary[];
 }
 
+/*
+ * The session cookie is httpOnly (scripts can't read it), so we also keep a harmless
+ * "probably signed in" flag. Visitors without it see public pages instantly instead of
+ * waiting for /api/auth/me; the real check still runs and always wins.
+ */
+const HINT = "awafund-signed-in";
+export function hasSessionHint() {
+  try {
+    return localStorage.getItem(HINT) === "1";
+  } catch {
+    return false;
+  }
+}
+function setSessionHint(on: boolean) {
+  try {
+    if (on) localStorage.setItem(HINT, "1");
+    else localStorage.removeItem(HINT);
+  } catch {
+    /* private mode */
+  }
+}
+
 export function useMe() {
   return useQuery({
     queryKey: ["me"],
     queryFn: async () => {
       try {
-        return await api.get<Me>("/auth/me");
+        const me = await api.get<Me>("/auth/me");
+        setSessionHint(true);
+        return me;
       } catch (e) {
-        if (e instanceof ApiError && e.status === 401) return null;
+        if (e instanceof ApiError && e.status === 401) {
+          setSessionHint(false);
+          return null;
+        }
         throw e;
       }
     },
@@ -41,6 +68,7 @@ export function useMe() {
 export function useSetMe() {
   const qc = useQueryClient();
   return (me: Me | null) => {
+    setSessionHint(!!me);
     qc.clear();
     qc.setQueryData(["me"], me);
   };

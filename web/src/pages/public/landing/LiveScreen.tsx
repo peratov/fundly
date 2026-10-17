@@ -25,7 +25,7 @@ export function LiveScreen({
 }) {
   const box = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
-  const [near, setNear] = useState(eager);
+  const [near, setNear] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -34,11 +34,25 @@ export function LiveScreen({
     const ro = new ResizeObserver(() => setScale(el.clientWidth / width));
     ro.observe(el);
     let io: IntersectionObserver | undefined;
-    if (!eager) {
+    let cancel = () => {};
+    if (eager) {
+      // Above the fold, but never at the expense of the page it sits on: start once the
+      // page has finished loading and the browser is idle.
+      const go = () => {
+        const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+        if (idle) idle(() => setNear(true), { timeout: 1500 });
+        else setTimeout(() => setNear(true), 300);
+      };
+      if (document.readyState === "complete") go();
+      else {
+        window.addEventListener("load", go, { once: true });
+        cancel = () => window.removeEventListener("load", go);
+      }
+    } else {
       io = new IntersectionObserver(([e]) => e.isIntersecting && (setNear(true), io?.disconnect()), { rootMargin: "400px" });
       io.observe(el);
     }
-    return () => (ro.disconnect(), io?.disconnect());
+    return () => (ro.disconnect(), io?.disconnect(), cancel());
   }, [width, eager]);
 
   // A new screen fades in once it has painted.
