@@ -135,7 +135,7 @@ const CTA_TOOL = `<aside class="cta-box">
 const CTA_FUND = `<aside class="cta-box alt">
 <p class="kicker">AwaFund</p>
 <h2>Run your group fund like a real bank</h2>
-<p>Dues by mobile money, fair loans, welfare cover and books that always balance. 14 days free.</p>
+<p>Fair loans, welfare cover and books that always balance. Free forever for up to 25 members.</p>
 <a class="btn" href="/signup">Start your fund free →</a>
 </aside>`;
 

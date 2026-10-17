@@ -1,6 +1,7 @@
 import { FileUp } from "lucide-react";
 import { useState } from "react";
 import { Button, Card, ErrorText, PageHeader, Tabs, Textarea } from "../../components/ui";
+import { isPlanError, UpgradeCard } from "../../components/upgrade";
 import { api } from "../../lib/api";
 import { useAction } from "../../lib/hooks";
 import { useFund } from "../../lib/session";
@@ -71,7 +72,7 @@ export default function ImportData() {
             </Button>
           </div>
           <div className="mt-3">
-            <ErrorText error={run.error} />
+            {isPlanError(run.error) ? <UpgradeCard compact title="More members than your plan includes" body={run.error.message} /> : <ErrorText error={run.error} />}
           </div>
           {result && (
             <div className="mt-4 text-sm">

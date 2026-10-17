@@ -69,7 +69,7 @@ console.log(`Seeding demo fund with ${people.length} members… (this books ~2,0
 const settings = defaultSettings(3000);
 const [tenant] = await db
   .insert(tenants)
-  .values({ slug: "dzolali-09", name: "Dzolali'09 Savings Fund", shortName: "Dzolali'09", currency: "GHS", status: "active", plan: "standard", settings })
+  .values({ slug: "dzolali-09", name: "Dzolali'09 Savings Fund", shortName: "Dzolali'09", currency: "GHS", status: "active", plan: "growth", settings })
   .returning();
 await db.insert(sharePrices).values([
   { tenantId: tenant.id, effectivePeriod: "2019-01", priceMinor: 2000 },

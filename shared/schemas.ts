@@ -186,7 +186,8 @@ export const paymentInitSchema = z.discriminatedUnion("purpose", [
 export const tenantAdminUpdateSchema = z.object({
   status: z.enum(TENANT_STATUSES).optional(),
   plan: z.enum(PLANS).optional(),
-  trialEndsAt: isoDate.optional(),
+  /** Paid through; null clears it (no expiry). */
+  planExpiresAt: isoDate.nullable().optional(),
 });
 
 // ---------------------------------------------------------------- assistant

@@ -1,7 +1,7 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { listQuerySchema, tenantAdminUpdateSchema } from "../../shared/schemas";
-import { circles, leads, tenants, users } from "../db/schema";
+import { billingPayments, circles, leads, tenants, users } from "../db/schema";
 import { toCsvLine } from "../lib/csv";
 import { requirePlatformAdmin } from "../lib/auth";
 import type { AppEnv } from "../lib/context";
@@ -33,14 +33,20 @@ adminRoutes.get("/tenants", async (c) => {
   const [stats] = await db
     .select({
       funds: sql<number>`count(*)::int`,
-      active: sql<number>`count(*) filter (where ${tenants.status} = 'active')::int`,
-      trial: sql<number>`count(*) filter (where ${tenants.status} = 'trial')::int`,
+      active: sql<number>`count(*) filter (where ${tenants.plan} <> 'free')::int`,
+      free: sql<number>`count(*) filter (where ${tenants.plan} = 'free')::int`,
       suspended: sql<number>`count(*) filter (where ${tenants.status} in ('suspended', 'cancelled'))::int`,
       users: sql<number>`(select count(*)::int from ${users})`,
     })
     .from(tenants);
+  // Subscription revenue in the last 30 days, per currency (funds pay in their own currency).
+  const revenue = await db
+    .select({ currency: billingPayments.currency, amountMinor: sql<string>`sum(${billingPayments.amountMinor})` })
+    .from(billingPayments)
+    .where(sql`${billingPayments.status} = 'succeeded' and ${billingPayments.completedAt} > now() - interval '30 days'`)
+    .groupBy(billingPayments.currency);
   return c.json({
-    stats,
+    stats: { ...stats, revenue30d: revenue.map((r) => ({ currency: r.currency, amountMinor: Number(r.amountMinor) })) },
     ...paged(
       rows.map((r) => ({ ...r.tenant, settings: undefined, members: r.members, cashMinor: Number(r.cashMinor), owner: r.owner, lastActivity: r.lastActivity })),
       total,

@@ -112,66 +112,6 @@ export function Compare() {
 
 // ---------------------------------------------------------------- pricing
 
-export function Pricing() {
-  const [annual, setAnnual] = useState(true);
-  const price = annual ? 250 : 25;
-  return (
-    <section id="pricing" className="relative overflow-hidden bg-[#fbfaf7] py-24 text-slate-900 sm:py-32 dark:bg-slate-950 dark:text-white">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 sm:px-8 lg:grid-cols-2">
-        <Reveal>
-          <p className="text-sm font-bold tracking-[0.2em] text-coral-600 uppercase">Pricing</p>
-          <h2 className="mt-4 font-display text-4xl font-extrabold tracking-tight sm:text-6xl">One plan. Every feature. Every member.</h2>
-          <p className="mt-5 text-lg text-slate-600 dark:text-slate-400">No per-member fees, so your fund can grow without the bill growing with it. Start with a free 14-day trial; your data stays yours and exports any time.</p>
-          <div className="mt-8 inline-flex items-center gap-3 rounded-full bg-white p-1.5 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
-            <button onClick={() => setAnnual(false)} className={clsx("rounded-full px-4 py-2 text-sm font-bold transition", !annual ? "bg-ink-950 text-white dark:bg-white dark:text-ink-950" : "text-slate-500")}>
-              Monthly
-            </button>
-            <button onClick={() => setAnnual(true)} className={clsx("flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition", annual ? "bg-ink-950 text-white dark:bg-white dark:text-ink-950" : "text-slate-500")}>
-              Yearly <span className="rounded-full bg-sun-400 px-2 py-0.5 text-[10px] text-ink-950">2 months free</span>
-            </button>
-          </div>
-        </Reveal>
-
-        <Reveal delay={120}>
-          <div className="relative overflow-hidden rounded-[2rem] p-[2px] shadow-2xl shadow-grape-500/25">
-            <div className="absolute -inset-[60%] animate-spin-slow" style={{ background: "conic-gradient(from 0deg, #2dd4bf, #a78bfa, #ff6b4a, #ffd23f, #2dd4bf)" }} aria-hidden />
-            <div className="relative rounded-[calc(2rem-2px)] bg-ink-950 p-8 text-white sm:p-10">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-display text-2xl font-bold">AwaFund Standard</p>
-                  <p className="mt-1 text-sm text-white/50">For one fund, unlimited members</p>
-                </div>
-                <span className="rounded-full bg-coral-500 px-3 py-1 text-xs font-bold">Most groups</span>
-              </div>
-              <p className="mt-8 flex items-end gap-2">
-                <span key={price} className="animate-pop font-display text-7xl font-extrabold tracking-tight">${price}</span>
-                <span className="pb-3 text-white/50">/{annual ? "year" : "month"}</span>
-              </p>
-              {annual && <p className="text-sm text-sun-300">That's about $20.83 a month</p>}
-              <ul className="mt-8 grid gap-3 text-sm sm:grid-cols-2">
-                {["Unlimited members", "Mobile money collections", "Loans & committee reviews", "Welfare claims", "Shares & dividends", "Double-entry reports", "CSV import & export", "Full audit trail"].map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-white/80">
-                    <span className="flex size-5 items-center justify-center rounded-full bg-brand-500/20 text-brand-300">
-                      <Check className="size-3" />
-                    </span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/signup" className="group relative mt-10 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
-                <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                <span className="relative">Start 14-day free trial</span>
-                <ArrowRight className="relative size-5 transition group-hover:translate-x-1" />
-              </Link>
-              <p className="mt-3 text-center text-xs text-white/40">No card needed. Cancel anytime.</p>
-            </div>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
 // ---------------------------------------------------------------- FAQ
 
 const FAQS = [
@@ -180,7 +120,11 @@ const FAQS = [
   ["We already have years of records in Excel. Can we bring them?", "Yes. Import members and contribution history from CSV. Every row is validated first and the whole file is saved together or not at all, so you never end up half-imported."],
   ["Who can see what?", "Members see only their own savings, loans and claims. Managers run the fund, the credit committee reviews loans, and the audit committee gets read-only access to everything plus the audit log."],
   ["How are loan limits and credit scores worked out?", "From five transparent habits: how long someone has been a member, contribution size, regularity, past loan repayment and meeting attendance. Your fund sets the thresholds."],
-  ["What happens after the trial?", "Your fund becomes read-only until the owner subscribes. Nothing is deleted, and you can export everything at any time."],
+  ["Is it really free forever?", "Yes. Funds with up to 25 members get the full books, loans, welfare, shares and member app free, with no time limit and no card. It isn't a trial."],
+  ["What happens when we pass 25 members?", "Your existing members and records stay exactly as they are; you just can't add the 26th until the owner upgrades to Growth (up to 150 members) or Pro (unlimited). Upgrading takes two taps inside the app."],
+  ["Why can't members pay in the app on Free?", "Collecting money online means running payments, receipts and automatic reconciliation for you, so it's part of the paid plans. On Free, members pay the treasurer as they do today and the treasurer records it in seconds."],
+  ["What does 0% markup mean?", "When members pay by mobile money on Growth or Pro, the payment provider charges its standard fee. AwaFund takes nothing on top of that, however much your fund collects."],
+  ["What if we stop paying?", "Nothing is deleted. After a 7-day grace period the fund moves to the Free plan, mobile money collection switches off, and you can renew any time to switch it back on."],
 ] as const;
 
 export function Faq() {

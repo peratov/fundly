@@ -17,6 +17,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { ClaimStatus, ClaimType, ContributionStatus, LoanStatus, MomoNetwork, PaymentMethod, PaymentStatus, Plan, Role, Standing, TenantStatus, MemberStatus } from "../../shared/enums";
 import type { FundSettings } from "../../shared/settings";
+import type { BillingInterval, PaidPlanId } from "../../shared/plans";
 
 /*
  * Every tenant-owned table carries tenant_id and leads its indexes with it, so
@@ -65,9 +66,12 @@ export const tenants = pgTable(
     name: text("name").notNull(),
     shortName: text("short_name"),
     currency: text("currency").notNull(),
-    status: text("status").$type<TenantStatus>().notNull().default("trial"),
-    plan: text("plan").$type<Plan>().notNull().default("trial"),
+    status: text("status").$type<TenantStatus>().notNull().default("active"),
+    plan: text("plan").$type<Plan>().notNull().default("free"),
+    /** Legacy, unused since the Free plan replaced trials. */
     trialEndsAt: date("trial_ends_at"),
+    /** Last day a paid plan is paid for; null = no expiry (Free, or a plan set by an operator). */
+    planExpiresAt: date("plan_expires_at"),
     settings: jsonb("settings").$type<FundSettings>().notNull(),
     createdAt: createdAt(),
   },
@@ -321,6 +325,28 @@ export const payments = pgTable(
     index("payments_tenant_created_idx").on(t.tenantId, t.createdAt),
     index("payments_tenant_member_idx").on(t.tenantId, t.membershipId),
   ],
+);
+
+/** Subscription payments from a fund to AwaFund (separate from members' payments to their fund). */
+export const billingPayments = pgTable(
+  "billing_payments",
+  {
+    id: id(),
+    tenantId: tenantId(),
+    reference: text("reference").notNull(),
+    provider: text("provider").notNull(),
+    plan: text("plan").$type<PaidPlanId>().notNull(),
+    interval: text("interval").$type<BillingInterval>().notNull(),
+    months: integer("months").notNull(),
+    amountMinor: money("amount_minor"),
+    currency: text("currency").notNull(),
+    status: text("status").$type<PaymentStatus>().notNull().default("pending"),
+    paidThrough: date("paid_through"),
+    createdBy: uuid("created_by"),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex("billing_payments_reference_uq").on(t.reference), index("billing_payments_tenant_idx").on(t.tenantId, t.createdAt)],
 );
 
 // ---------------------------------------------------------------- ledger

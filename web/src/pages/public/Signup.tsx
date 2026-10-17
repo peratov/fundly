@@ -45,7 +45,7 @@ export default function Signup() {
   return (
     <AuthLayout
       title={loggedIn ? "Start another fund" : "Create your fund"}
-      subtitle="14-day free trial. You'll be the owner and can invite your executives and members next."
+      subtitle="Free forever for up to 25 members, no card needed. You'll be the owner and can invite your executives and members next."
       footer={
         !loggedIn && (
           <>

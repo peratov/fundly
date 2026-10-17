@@ -61,6 +61,7 @@ async function capture(persona, email, alias) {
   for (const l of mine.loans ?? []) await save(`${base}/loans/${l.id}`);
 
   if (persona === "owner") {
+    await save(`${base}/billing`);
     const overview = await get(`${base}/overview`);
     out[`/t/${alias}/overview`] = overview;
     const period = overview.period;

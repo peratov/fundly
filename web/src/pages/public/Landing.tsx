@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { Features } from "./landing/Features";
 import { Hero } from "./landing/Hero";
 import { Nav } from "./landing/Nav";
-import { Compare, Faq, FinalCta, Footer, HowItWorks, Marquee, Pricing, ToolTeaser } from "./landing/Sections";
+import { Compare, Faq, FinalCta, Footer, HowItWorks, Marquee, ToolTeaser } from "./landing/Sections";
+import { Pricing } from "./landing/Pricing";
 import { Simulator } from "./landing/Simulator";
 
 export default function Landing() {

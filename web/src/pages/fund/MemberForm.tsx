@@ -3,6 +3,7 @@ import { ROLE_LABELS, ROLES, type Role } from "../../../../shared/enums";
 import { Button, ErrorText, Field, fieldError, Input, Modal, Select } from "../../components/ui";
 import { api } from "../../lib/api";
 import { useAction, useFundInfo } from "../../lib/hooks";
+import { isPlanError, UpgradeCard } from "../../components/upgrade";
 import { todayIso } from "../../lib/format";
 import { useFund } from "../../lib/session";
 import type { Member } from "../../lib/types";
@@ -121,7 +122,7 @@ export function MemberFormModal({ open, onClose, member, onCreated }: { open: bo
         </label>
       )}
       <div className="mt-4">
-        <ErrorText error={err} />
+        {isPlanError(err) ? <UpgradeCard compact title="Your fund is full on this plan" body={err.message} /> : <ErrorText error={err} />}
       </div>
     </Modal>
   );

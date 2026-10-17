@@ -80,4 +80,4 @@ Share a simple report with members every month or quarter, and have an [annual a
 
 Next, set up the basics that keep a fund trustworthy: a [group bank account with dual signatories](/learn/opening-a-group-bank-account), a [monthly financial report](/learn/monthly-financial-report-for-members) for members, and a clear [joining and exit policy](/learn/member-joining-and-exit-policy).
 
-[AwaFund](/signup) was built for exactly this kind of fund: members pay dues by mobile money, committees review loans, welfare limits are enforced automatically, and the books always balance. It's free for 14 days.
+[AwaFund](/signup) was built for exactly this kind of fund: members pay dues by mobile money, committees review loans, welfare limits are enforced automatically, and the books always balance. It's free forever for funds of up to 25 members.

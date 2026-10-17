@@ -18,6 +18,16 @@ export interface ChargeResult {
   failureReason?: string;
 }
 
+/** A hosted checkout page (card or mobile money), used for subscription payments. */
+export interface CheckoutRequest {
+  reference: string;
+  amountMinor: number;
+  currency: string;
+  email: string;
+  callbackUrl: string;
+  metadata: Record<string, string>;
+}
+
 export interface WebhookEvent {
   reference: string;
   status: "succeeded" | "failed";
@@ -35,6 +45,8 @@ export interface PaymentProvider {
   /** True when the dev-only "simulate outcome" endpoint may be used. */
   readonly simulated: boolean;
   charge(req: ChargeRequest): Promise<ChargeResult>;
+  /** Start a hosted checkout. Returns the page to send the payer to; null for the simulator. */
+  checkout(req: CheckoutRequest): Promise<{ url: string | null }>;
   /** Ask the gateway for the current status (used when a webhook is late or missing). */
   verify(reference: string): Promise<WebhookEvent | null>;
   /** Parse and authenticate an incoming webhook. Returns null for invalid signatures or irrelevant events. */
@@ -47,6 +59,9 @@ export function mockProvider(): PaymentProvider {
     simulated: true,
     async charge() {
       return { status: "pending", displayText: "Simulated MoMo prompt sent. Use the simulator to approve or decline." };
+    },
+    async checkout() {
+      return { url: null };
     },
     async verify() {
       return null;
@@ -89,6 +104,15 @@ export function paystackProvider(secretKey: string, fetchImpl: typeof fetch = fe
       if (status === "success") return { status: "succeeded" };
       if (status === "failed") return { status: "failed", failureReason: String(json.data?.gateway_response ?? "Charge failed") };
       return { status: "pending", displayText: String(json.data?.display_text ?? "Approve the payment prompt on your phone.") };
+    },
+    async checkout(req) {
+      const { ok, json } = await api("/transaction/initialize", {
+        method: "POST",
+        body: JSON.stringify({ email: req.email, amount: req.amountMinor, currency: req.currency, reference: req.reference, callback_url: req.callbackUrl, metadata: req.metadata }),
+      });
+      const url = json.data?.authorization_url;
+      if (!ok || typeof url !== "string") throw new Error(json.message ?? "Could not start checkout");
+      return { url };
     },
     async verify(reference) {
       const { ok, json } = await api(`/transaction/verify/${encodeURIComponent(reference)}`);

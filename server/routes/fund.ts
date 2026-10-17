@@ -81,7 +81,7 @@ fundRoutes.get("/overview", async (c) => {
 fundRoutes.get("/settings", async (c) => {
   const tenant = c.get("tenant");
   const prices = await loadSharePrices(c.get("deps").db, tenant.id);
-  return c.json({ id: tenant.id, name: tenant.name, shortName: tenant.shortName, currency: tenant.currency, status: tenant.status, plan: tenant.plan, trialEndsAt: tenant.trialEndsAt, settings: tenant.settings, sharePrices: prices });
+  return c.json({ id: tenant.id, name: tenant.name, shortName: tenant.shortName, currency: tenant.currency, status: tenant.status, plan: tenant.plan, planExpiresAt: tenant.planExpiresAt, settings: tenant.settings, sharePrices: prices });
 });
 
 fundRoutes.put("/settings", async (c) => {

@@ -49,11 +49,11 @@ export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 export const MOMO_NETWORKS = ["mtn", "telecel", "at"] as const;
 export type MomoNetwork = (typeof MOMO_NETWORKS)[number];
 
-export const TENANT_STATUSES = ["trial", "active", "suspended", "cancelled"] as const;
+// "trial" is legacy (pre-Free-plan funds were migrated to active).
+export const TENANT_STATUSES = ["active", "suspended", "cancelled", "trial"] as const;
 export type TenantStatus = (typeof TENANT_STATUSES)[number];
 
-export const PLANS = ["trial", "standard", "enterprise"] as const;
-export type Plan = (typeof PLANS)[number];
+export { PLAN_IDS as PLANS, type PlanId as Plan } from "./plans";
 
 /**
  * Chart of accounts for the double-entry journal. Every money movement posts

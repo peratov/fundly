@@ -13,8 +13,13 @@ import { conflict, forbidden, notFound, paged, parseBody, parseQuery, unprocessa
 import { audit, nextRef } from "../lib/records";
 import { loanView } from "../services/loans";
 import { memberSnapshot } from "../services/members";
+import { assertCanAddMembers, entitlements } from "../services/billing";
+import { templateAssistant } from "../lib/assistant";
 
 export const memberRoutes = new Hono<AppEnv>();
+
+/** Claude writes the narrative on paid plans; Free gets the deterministic template (same facts). */
+const assistantFor = (c: Ctx) => (entitlements(c.get("tenant")).aiAssistant ? c.get("deps").assistant : templateAssistant);
 
 function canSee(c: Ctx, membershipId: string) {
   if (c.get("membership").id === membershipId) return;
@@ -85,6 +90,7 @@ memberRoutes.post("/", async (c) => {
   if (input.roles.some((r) => r !== "member") && !c.get("perms").has("roles:write")) {
     throw forbidden("Only the fund owner can assign roles");
   }
+  await assertCanAddMembers(db, tenant);
   const pkgId = input.welfarePackageId ?? tenant.settings.defaultWelfarePackageId;
   if (!tenant.settings.welfarePackages.some((p) => p.id === pkgId)) throw unprocessable("Unknown welfare package");
 
@@ -217,7 +223,8 @@ memberRoutes.post("/:id/invite", async (c) => {
 memberRoutes.post("/:id/assessment", async (c) => {
   requirePerm(c, "loans:read", "members:write");
   const tenant = c.get("tenant");
-  const { db, clock, assistant } = c.get("deps");
+  const { db, clock } = c.get("deps");
+  const assistant = assistantFor(c);
   const snap = await memberSnapshot(db, tenant, c.req.param("id"), clock.now());
   const result = await assistant.assess({
     memberName: snap.member.name,
@@ -236,7 +243,8 @@ memberRoutes.post("/:id/outreach", async (c) => {
   requirePerm(c, "members:write");
   const input = await parseBody(c, outreachSchema);
   const tenant = c.get("tenant");
-  const { db, clock, assistant } = c.get("deps");
+  const { db, clock } = c.get("deps");
+  const assistant = assistantFor(c);
   const snap = await memberSnapshot(db, tenant, c.req.param("id"), clock.now());
   const money = (m: number) => formatMoney(m, tenant.currency);
   const missed = snap.contributions.filter((x) => x.status === "missed").slice(-6).map((x) => formatPeriod(x.period));

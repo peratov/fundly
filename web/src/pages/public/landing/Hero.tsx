@@ -83,7 +83,7 @@ export function Hero() {
             </a>
           </div>
           <ul className="mt-10 flex animate-rise flex-wrap gap-x-6 gap-y-2 text-sm text-white/60 [animation-delay:320ms]">
-            {["14 days free", "No card needed", "Unlimited members", "Import your spreadsheet"].map((t) => (
+            {["Free forever up to 25 members", "No card needed", "Mobile money on Growth", "Import your spreadsheet"].map((t) => (
               <li key={t} className="flex items-center gap-1.5">
                 <CheckCircle2 className="size-4 text-brand-300" /> {t}
               </li>

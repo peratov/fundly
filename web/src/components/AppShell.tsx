@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bell,
+  Gem,
   Building2,
   ChevronDown,
   Coins,
@@ -55,6 +56,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "audit", label: "Audit log", icon: <ScrollText />, perm: ["audit:read", "members:write"] },
   { to: "import", label: "Import data", icon: <Upload />, perm: ["import:write"] },
   { to: "settings", label: "Fund settings", icon: <Settings />, perm: ["settings:write"] },
+  { to: "billing", label: "Plan & billing", icon: <Gem />, perm: ["settings:write"] },
 ];
 
 const MEMBER_NAV: NavItem[] = [
@@ -89,7 +91,7 @@ function useDarkMode() {
 }
 
 export function AppShell() {
-  const { fund, me, can, tenantId } = useFund();
+  const { fund, me, can, tenantId, plan } = useFund();
   const [open, setOpen] = useState(false);
   const location = useLocation();
   useEffect(() => setOpen(false), [location.pathname]);
@@ -107,11 +109,11 @@ export function AppShell() {
   }
 
   const staff = STAFF_NAV.filter((n) => !n.perm || n.perm.some(can));
-  const trialDays = fund.status === "trial" && fund.trialEndsAt ? Math.ceil((new Date(fund.trialEndsAt).getTime() - Date.now()) / 86_400_000) : null;
 
   const sidebar = (
     <nav className="flex h-full flex-col gap-6 overflow-y-auto px-3 py-4">
       <FundSwitcher />
+      <PlanChip />
       {staff.length > 0 && <NavGroup title="Manage" items={staff} base={`/f/${tenantId}`} />}
       <NavGroup title="My account" items={MEMBER_NAV} base={`/f/${tenantId}`} />
       {me.user.isPlatformAdmin && <NavGroup title="Platform" items={[{ to: "/admin", label: "Operator console", icon: <Shield /> }]} base="" />}
@@ -140,17 +142,13 @@ export function AppShell() {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar onMenu={() => setOpen(true)} />
         {IS_DEMO && !IS_EMBED && <DemoBanner />}
-        {trialDays !== null && (
-          <div className={clsx("px-4 py-2 text-center text-xs font-medium sm:px-8", trialDays > 0 ? "bg-sky-50 text-sky-800 dark:bg-sky-950/40 dark:text-sky-300" : "bg-rose-50 text-rose-800")}>
-            {trialDays > 0 ? `Free trial: ${trialDays} day${trialDays === 1 ? "" : "s"} left.` : "Your free trial has ended — the fund is read-only until the owner upgrades."}
-          </div>
-        )}
+        <PlanNotice />
         {/* Extra bottom padding on phones so content clears the tab bar. */}
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-5 pb-[calc(6.5rem+env(safe-area-inset-bottom))] sm:px-8 sm:pt-8 lg:pb-8">
           <Outlet />
         </main>
       </div>
-      <BottomNav staff={staff.length > 0} base={`/f/${tenantId}`} onMenu={() => setOpen(true)} />
+      <BottomNav staff={staff.length > 0} base={`/f/${tenantId}`} onMenu={() => setOpen(true)} canPay={plan.onlinePayments} />
     </div>
   );
 }
@@ -159,7 +157,7 @@ export function AppShell() {
  * Phone-only tab bar: the five things people do most, within thumb reach.
  * Members get a raised "Pay" button; staff get "Record" (a contribution).
  */
-function BottomNav({ staff, base, onMenu }: { staff: boolean; base: string; onMenu: () => void }) {
+function BottomNav({ staff, base, onMenu, canPay }: { staff: boolean; base: string; onMenu: () => void; canPay: boolean }) {
   const tabs = staff
     ? [
         { to: `${base}/overview`, label: "Home", icon: <LayoutDashboard /> },
@@ -170,7 +168,8 @@ function BottomNav({ staff, base, onMenu }: { staff: boolean; base: string; onMe
     : [
         { to: `${base}/portal`, label: "Home", icon: <Coins />, end: true },
         { to: `${base}/portal/loans`, label: "Loans", icon: <HandCoins /> },
-        { to: `${base}/portal?pay=1`, label: "Pay", icon: <Wallet />, primary: true },
+        // On Free, members pay their treasurer directly, so the raised Pay button becomes History.
+        canPay ? { to: `${base}/portal?pay=1`, label: "Pay", icon: <Wallet />, primary: true } : { to: `${base}/portal/history`, label: "History", icon: <History /> },
         { to: `${base}/portal/welfare`, label: "Welfare", icon: <HeartPulse /> },
       ];
   return (
@@ -415,6 +414,45 @@ function DemoBanner() {
           Exit demo
         </a>
       </span>
+    </div>
+  );
+}
+
+/** Under the fund name: the plan, with a nudge to upgrade for owners on Free. */
+function PlanChip() {
+  const { plan, can, tenantId } = useFund();
+  if (!can("settings:write")) return null;
+  return (
+    <Link to={`/f/${tenantId}/billing`} className="-mt-3 flex items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/10">
+      <span className="flex items-center gap-2 font-semibold text-white/80">
+        <Gem className="size-3.5 text-sun-300" /> {plan.name} plan
+      </span>
+      {plan.id === "free" ? <span className="rounded-full bg-gradient-to-r from-coral-500 to-sun-400 px-2 py-0.5 font-bold text-ink-950">Upgrade</span> : <span className="text-white/40">Manage</span>}
+    </Link>
+  );
+}
+
+/** Renewal reminders inside the app: a week before a paid plan ends, and during the grace period. */
+function PlanNotice() {
+  const { fund, plan, can, tenantId } = useFund();
+  if (!fund?.planExpiresAt || plan.id === "free") return null;
+  const days = Math.round((Date.parse(`${fund.planExpiresAt}T00:00:00Z`) - Date.parse(new Date().toISOString().slice(0, 10) + "T00:00:00Z")) / 86_400_000);
+  if (days > 7) return null;
+  const owner = can("settings:write");
+  const text =
+    days >= 0
+      ? `Your ${plan.name} plan ends ${days === 0 ? "today" : `in ${days} day${days === 1 ? "" : "s"}`}.`
+      : `Your ${plan.name} plan ended ${-days} day${days === -1 ? "" : "s"} ago. Mobile money collection switches off when the grace period ends.`;
+  return (
+    <div className={clsx("flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2 text-center text-xs font-medium sm:px-8", days >= 0 ? "bg-sky-50 text-sky-900 dark:bg-sky-950/40 dark:text-sky-200" : "bg-amber-50 text-amber-900 dark:bg-amber-950/40 dark:text-amber-200")}>
+      <span>{text}</span>
+      {owner ? (
+        <Link to={`/f/${tenantId}/billing`} className="rounded-full bg-ink-900 px-3 py-1 font-semibold text-white hover:bg-ink-800 dark:bg-white dark:text-ink-900">
+          Renew now
+        </Link>
+      ) : (
+        <span className="opacity-70">Ask your fund owner to renew.</span>
+      )}
     </div>
   );
 }

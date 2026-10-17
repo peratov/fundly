@@ -36,7 +36,7 @@ const SELECTORS = new Set(["mine", "status", "to", "from", "months"]);
 // Params the demo applies itself to list items, like the API's WHERE clauses.
 const FILTERS = ["status", "standing", "role", "type"];
 
-export const DEMO_WRITE_MESSAGE = "This is a demo fund, so nothing is saved. Start a free trial to run your own.";
+export const DEMO_WRITE_MESSAGE = "This is a demo fund, so nothing is saved. Start your own fund free; it's free forever for up to 25 members.";
 
 export async function demoRequest<T>(method: string, path: string): Promise<T> {
   const f = await loadDemoFixtures();

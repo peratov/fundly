@@ -169,3 +169,48 @@ html.embed {
 html.embed::-webkit-scrollbar {
   display: none;
 }
+
+/* Pricing calculator slider: the coloured plan zones are drawn underneath, so the track is clear. */
+.awa-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+.awa-range::-webkit-slider-runnable-track {
+  height: 10px;
+  background: transparent;
+}
+.awa-range::-moz-range-track {
+  height: 10px;
+  background: transparent;
+}
+.awa-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  margin-top: -9px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 4px solid #7c3aed;
+  box-shadow: 0 6px 18px -4px rgb(124 58 237 / 0.6);
+  transition: transform 0.15s;
+}
+.awa-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 4px solid #7c3aed;
+  box-shadow: 0 6px 18px -4px rgb(124 58 237 / 0.6);
+}
+.awa-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.awa-range:focus-visible {
+  outline: none;
+}
+.awa-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 6px rgb(124 58 237 / 0.25);
+}

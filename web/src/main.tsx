@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { lazy, StrictMode, Suspense, type ReactNode } from "react";
+import { lazy, StrictMode, Suspense, useEffect, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Navigate, RouterProvider, useParams } from "react-router";
 import { AppShell } from "./components/AppShell";
@@ -39,6 +39,7 @@ const Reports = lazy(() => import("./pages/fund/Reports"));
 const Audit = lazy(() => import("./pages/fund/Audit"));
 const ImportData = lazy(() => import("./pages/fund/ImportData"));
 const FundSettings = lazy(() => import("./pages/fund/Settings"));
+const Billing = lazy(() => import("./pages/fund/Billing"));
 const Portal = lazy(() => import("./pages/portal/Portal"));
 const PortalLoans = lazy(() => import("./pages/portal/PortalLoans"));
 const PortalWelfare = lazy(() => import("./pages/portal/PortalWelfare"));
@@ -60,10 +61,29 @@ function S({ children }: { children: ReactNode }) {
 }
 
 function RequireAuth({ children }: { children: ReactNode }) {
-  const { data: me, isLoading } = useMe();
+  const { data: me, isLoading, isError, refetch, isFetching } = useMe();
   if (isLoading) return <Loading />;
+  // Only a 401 means "signed out" (useMe returns null). A network blip, deploy or cold start
+  // must not throw people back to the sign-in page.
+  if (isError && me === undefined) return <Reconnecting onRetry={() => refetch()} busy={isFetching} />;
   if (!me) return <Navigate to={`/login?next=${encodeURIComponent(location.pathname)}`} replace />;
   return <>{children}</>;
+}
+
+function Reconnecting({ onRetry, busy }: { onRetry: () => void; busy: boolean }) {
+  useEffect(() => {
+    const t = setInterval(onRetry, 5000);
+    return () => clearInterval(t);
+  }, [onRetry]);
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-3 px-6 text-center">
+      <p className="font-display text-xl font-bold">Can't reach AwaFund right now</p>
+      <p className="max-w-sm text-sm text-slate-500">Check your connection. We'll keep trying, and you'll pick up right where you left off.</p>
+      <button onClick={onRetry} disabled={busy} className="mt-2 rounded-xl bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60">
+        {busy ? "Reconnecting…" : "Try again"}
+      </button>
+    </div>
+  );
 }
 
 function Home() {
@@ -126,6 +146,7 @@ const router = createBrowserRouter([
       { path: "audit", element: <S><Audit /></S> },
       { path: "import", element: <S><ImportData /></S> },
       { path: "settings", element: <S><FundSettings /></S> },
+      { path: "billing", element: <S><Billing /></S> },
       { path: "portal", element: <S><Portal /></S> },
       { path: "portal/loans", element: <S><PortalLoans /></S> },
       { path: "portal/welfare", element: <S><PortalWelfare /></S> },

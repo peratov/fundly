@@ -277,13 +277,12 @@ describe("imports, exports and audit", () => {
 });
 
 describe("subscriptions & platform admin", () => {
-  it("an expired trial blocks writes but still allows reads", async () => {
-    await env.handle.db.update(tenants).set({ status: "trial", trialEndsAt: "2026-06-09" }).where(eq(tenants.id, tenantId));
-    env.clock.set("2026-07-01T10:00:00Z");
+  it("a suspended fund blocks writes but still allows reads", async () => {
+    await env.handle.db.update(tenants).set({ status: "suspended" }).where(eq(tenants.id, tenantId));
     expect((await owner.get(`${base}/members`)).status).toBe(200);
     const w = await owner.post(`${base}/members`, { name: "Late Joiner", joinedOn: "2026-06-01" });
     expect(w.status).toBe(402);
-    env.clock.set("2026-05-26T10:00:00Z");
+    await env.handle.db.update(tenants).set({ status: "active" }).where(eq(tenants.id, tenantId));
   });
 
   it("only platform admins reach the operator console", async () => {
@@ -293,7 +292,7 @@ describe("subscriptions & platform admin", () => {
     const list = await root.get("/api/admin/tenants");
     expect(list.status).toBe(200);
     expect(list.body.stats.funds).toBeGreaterThanOrEqual(3);
-    const upd = await root.patch(`/api/admin/tenants/${tenantId}`, { status: "active", plan: "standard" });
+    const upd = await root.patch(`/api/admin/tenants/${tenantId}`, { status: "active", plan: "growth" });
     expect(upd.body.status).toBe("active");
   });
 });

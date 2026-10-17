@@ -21,18 +21,20 @@ function greeting() {
 }
 
 export default function Portal() {
-  const { currency, fund } = useFund();
+  const { currency, fund, plan } = useFund();
+  // On the Free plan members pay their treasurer directly; in-app collection is a paid feature.
+  const canPay = plan.onlinePayments;
   const { data, isLoading } = usePortal();
   const [params, setParams] = useSearchParams();
   const [paying, setPaying] = useState<null | "dues" | string>(null);
   // Arriving from the mobile tab bar's "Pay" button.
   useEffect(() => {
-    if (params.get("pay") && data) {
+    if (params.get("pay") && data && canPay) {
       const open = data.loans.find((l) => ["active", "overdue", "defaulted"].includes(l.status));
       setPaying(data.duePeriods.length ? "dues" : open ? open.id : null);
       setParams({}, { replace: true });
     }
-  }, [params, data, setParams]);
+  }, [params, data, setParams, canPay]);
   if (isLoading || !data) return <Loading />;
   const { totals, member } = data;
   const m = (v: number) => money(v, currency);
@@ -92,10 +94,14 @@ export default function Portal() {
               <p className="font-semibold">Due: {data.duePeriods.map((p) => formatPeriod(p)).join(", ")}</p>
               <p className="text-white/60">Minimum {m(data.minContributionMinor)} per month</p>
             </div>
-            <button onClick={() => setPaying("dues")} className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl sm:w-auto bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-2.5 text-sm font-bold text-ink-950 shadow-lg shadow-coral-500/30 transition hover:scale-[1.03]">
-              <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-              <Smartphone className="relative size-4" /> <span className="relative">Pay with MoMo</span>
-            </button>
+            {canPay ? (
+              <button onClick={() => setPaying("dues")} className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl sm:w-auto bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-2.5 text-sm font-bold text-ink-950 shadow-lg shadow-coral-500/30 transition hover:scale-[1.03]">
+                <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                <Smartphone className="relative size-4" /> <span className="relative">Pay with MoMo</span>
+              </button>
+            ) : (
+              <p className="w-full text-xs text-white/70 sm:w-auto sm:max-w-[15rem]">Pay your treasurer as usual. Your balance updates here as soon as they record it.</p>
+            )}
           </div>
         )}
       </section>
@@ -108,8 +114,10 @@ export default function Portal() {
 
       {/* Quick actions */}
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {data.duePeriods.length ? (
+        {data.duePeriods.length && canPay ? (
           <ActionTile icon={<Wallet />} label="Pay dues" hint="Mobile money, in seconds" tone="coral" onClick={() => setPaying("dues")} />
+        ) : data.duePeriods.length ? (
+          <ActionTile icon={<Wallet />} label="Dues to pay" hint="Pay your treasurer" tone="coral" to="history" />
         ) : (
           <ActionTile icon={<Wallet />} label="All paid up" hint="Nothing due right now" tone="coral" to="history" />
         )}
@@ -130,9 +138,13 @@ export default function Portal() {
           {openLoan ? (
             <>
               <LoanSummary loan={openLoan} currency={currency} />
-              <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-grape-500 to-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-grape-500/25 transition hover:scale-[1.02]">
-                <Smartphone className="size-4" /> Make a repayment
-              </button>
+              {canPay ? (
+                <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-grape-500 to-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-grape-500/25 transition hover:scale-[1.02]">
+                  <Smartphone className="size-4" /> Make a repayment
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-slate-500">Repay your treasurer directly; it shows here once recorded.</p>
+              )}
             </>
           ) : pendingLoan ? (
             <LoanSummary loan={pendingLoan} currency={currency} />

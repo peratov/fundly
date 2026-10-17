@@ -7,6 +7,7 @@ import { hasPerm } from "../lib/auth";
 import type { AppEnv, Ctx } from "../lib/context";
 import { forbidden, notFound, paged, parseBody, parseQuery } from "../lib/http";
 import { completePayment, initiatePayment, simulateOutcome } from "../services/payments";
+import { assertOnlinePayments } from "../services/billing";
 
 export const paymentRoutes = new Hono<AppEnv>();
 
@@ -32,6 +33,7 @@ paymentRoutes.get("/", async (c) => {
 
 /** Members pay for themselves; the gateway prompts their phone. */
 paymentRoutes.post("/", async (c) => {
+  assertOnlinePayments(c.get("tenant"));
   const input = await parseBody(c, paymentInitSchema);
   const deps = c.get("deps");
   const [user] = await deps.db.select({ email: users.email }).from(users).where(eq(users.id, c.get("user").id));

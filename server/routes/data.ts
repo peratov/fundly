@@ -12,6 +12,7 @@ import { parseCsv, toCsvLine } from "../lib/csv";
 import { AppError, badRequest, parseBody } from "../lib/http";
 import { audit, nextRef } from "../lib/records";
 import { recordContribution } from "../services/savings";
+import { assertCanAddMembers } from "../services/billing";
 
 export const dataRoutes = new Hono<AppEnv>();
 
@@ -178,6 +179,7 @@ dataRoutes.post("/import/members", async (c) => {
     });
   });
 
+  if (valid.length) await assertCanAddMembers(db, tenant, valid.length);
   if (dryRun || errors.length) return c.json({ dryRun: true, total: rows.length, valid: valid.length, errors });
   await db.transaction(async (tx) => {
     for (const v of valid) if (!v.memberNo) v.memberNo = await nextRef(tx, tenant.id, "member", "M");

@@ -74,10 +74,6 @@ export const requireTenant: MiddlewareHandler<AppEnv> = async (c, next) => {
     if (tenant.status === "suspended" || tenant.status === "cancelled") {
       throw new AppError(402, "tenant_inactive", "This fund's subscription is inactive. Contact the fund owner.");
     }
-    const today = clock.now().toISOString().slice(0, 10);
-    if (tenant.status === "trial" && tenant.trialEndsAt && tenant.trialEndsAt < today) {
-      throw new AppError(402, "trial_expired", "This fund's free trial has ended. Upgrade to keep recording activity.");
-    }
   }
 
   const roles = membership.roles as Role[];

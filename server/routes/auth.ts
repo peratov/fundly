@@ -32,7 +32,7 @@ async function userPayload(c: Ctx, userId: string) {
       currency: tenants.currency,
       status: tenants.status,
       plan: tenants.plan,
-      trialEndsAt: tenants.trialEndsAt,
+      planExpiresAt: tenants.planExpiresAt,
       membershipId: memberships.id,
       memberName: memberships.name,
       roles: memberships.roles,
@@ -50,10 +50,9 @@ type FundInput = SignupInput["fund"];
 async function createFund(tx: Db, user: { id: string; name: string; email: string }, fund: FundInput, now: Date) {
   const today = now.toISOString().slice(0, 10);
   const settings = defaultSettings(fund.minContributionMinor);
-  const trialEnds = new Date(now.getTime() + 14 * 86_400_000).toISOString().slice(0, 10);
   const [tenant] = await tx
     .insert(tenants)
-    .values({ slug: slugify(fund.name), name: fund.name, shortName: fund.shortName || null, currency: fund.currency, settings, trialEndsAt: trialEnds })
+    .values({ slug: slugify(fund.name), name: fund.name, shortName: fund.shortName || null, currency: fund.currency, settings })
     .returning();
   await tx.insert(sharePrices).values({ tenantId: tenant.id, effectivePeriod: periodOf(now), priceMinor: fund.sharePriceMinor });
   const [membership] = await tx

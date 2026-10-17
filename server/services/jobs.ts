@@ -5,6 +5,7 @@ import { tenants } from "../db/schema";
 import type { Actor } from "../lib/context";
 import { flagOverdueLoans } from "./loans";
 import { closePeriod } from "./savings";
+import { applyPlanLifecycle } from "./billing";
 
 /**
  * Daily maintenance across every active fund, shared by `npm run jobs` (cron,
@@ -30,7 +31,7 @@ export async function runScheduledJobs(db: Db, now: Date, log: (msg: string) => 
     if (!batch.length) break;
     cursor = batch.at(-1)!.id;
 
-    for (const tenant of batch.filter((t) => ["active", "trial"].includes(t.status))) {
+    for (const tenant of batch.filter((t) => t.status === "active")) {
       try {
         await db.transaction(async (tx) => {
           const flagged = await flagOverdueLoans(tx, tenant, actor, today);
@@ -45,6 +46,8 @@ export async function runScheduledJobs(db: Db, now: Date, log: (msg: string) => 
       }
     }
   }
+  const plans = await applyPlanLifecycle(db, today);
+  if (plans.reminded || plans.downgraded) log(`[jobs] plans: ${plans.reminded} renewal reminders, ${plans.downgraded} moved to Free`);
   log(`[jobs] done: ${processed} funds processed, ${failures} failed`);
   return { processed, failures };
 }

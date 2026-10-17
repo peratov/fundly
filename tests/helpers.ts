@@ -6,7 +6,7 @@ import { openDb, type DbHandle } from "../server/db/client";
 import { templateAssistant } from "../server/lib/assistant";
 import type { Clock } from "../server/lib/context";
 import { devMailer } from "../server/email/mailer";
-import { mockProvider } from "../server/payments/provider";
+import { mockProvider, type PaymentProvider } from "../server/payments/provider";
 
 process.env.NODE_ENV = "test";
 
@@ -17,13 +17,13 @@ export interface TestEnv {
   mailer: ReturnType<typeof devMailer>;
 }
 
-export async function setup(now = "2026-05-26T10:00:00Z"): Promise<TestEnv> {
+export async function setup(now = "2026-05-26T10:00:00Z", overrides: { payments?: PaymentProvider } = {}): Promise<TestEnv> {
   const handle = await openDb();
   let current = new Date(now);
   const clock = { now: () => current, set: (d: string) => (current = new Date(d)) };
   const config = { ...loadConfig({ NODE_ENV: "test", APP_URL: "http://localhost:5173" }), platformAdminEmails: ["root@awafund.test"], sessionDays: 365 };
   const mailer = devMailer();
-  const app = createApp({ db: handle.db, config, clock, payments: mockProvider(), assistant: templateAssistant, mailer });
+  const app = createApp({ db: handle.db, config, clock, payments: overrides.payments ?? mockProvider(), assistant: templateAssistant, mailer });
   return { app, handle, clock, mailer };
 }
 
@@ -67,7 +67,7 @@ export async function signupFund(env: TestEnv, email = "owner@fund.test", name =
   });
   if (res.status !== 201) throw new Error(`signup failed: ${res.text}`);
   // Tests move the clock around; keep the fund on a paid plan unless a test opts into trial behaviour.
-  await env.handle.db.update(tenants).set({ status: "active", plan: "standard" }).where(eq(tenants.id, res.body.createdTenantId));
+  await env.handle.db.update(tenants).set({ status: "active", plan: "growth" }).where(eq(tenants.id, res.body.createdTenantId));
   return { c, tenantId: res.body.createdTenantId as string, base: `/api/t/${res.body.createdTenantId}` };
 }
 

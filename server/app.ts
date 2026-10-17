@@ -13,9 +13,11 @@ import { fundRoutes } from "./routes/fund";
 import { loanRoutes } from "./routes/loans";
 import { memberRoutes } from "./routes/members";
 import { paymentRoutes } from "./routes/payments";
+import { billingRoutes } from "./routes/billing";
 import { publicRoutes } from "./routes/public";
 import { learnRoutes } from "./learn/routes";
 import { savingsRoutes } from "./routes/savings";
+import { completeBillingPayment, isBillingReference } from "./services/billing";
 import { runScheduledJobs } from "./services/jobs";
 import { completePayment } from "./services/payments";
 
@@ -87,6 +89,7 @@ export function createApp(deps: Deps) {
   t.route("/loans", loanRoutes);
   t.route("/claims", claimRoutes);
   t.route("/payments", paymentRoutes);
+  t.route("/billing", billingRoutes);
   app.route("/api/t/:tenantId", t);
 
   app.post("/api/webhooks/:provider", async (c) => {
@@ -95,7 +98,9 @@ export function createApp(deps: Deps) {
     const evt = deps.payments.parseWebhook(raw, c.req.raw.headers);
     if (!evt) return c.json({ ok: false }, 400);
     try {
-      await completePayment(deps, deps.payments.name, evt.reference, evt);
+      // Subscription payments to AwaFund and members' payments to their fund share the gateway.
+      if (isBillingReference(evt.reference)) await completeBillingPayment(deps, evt.reference, evt);
+      else await completePayment(deps, deps.payments.name, evt.reference, evt);
     } catch (err) {
       if (err instanceof AppError && err.status === 404) return c.json({ ok: true, ignored: true });
       throw err;

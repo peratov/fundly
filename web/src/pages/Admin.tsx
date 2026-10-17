@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { useMe } from "../lib/session";
 import { PLANS, TENANT_STATUSES } from "../../../shared/enums";
+import { planInfo } from "../../../shared/plans";
 import { Badge, Card, Input, Loading, PageHeader, Pagination, SearchInput, Select, Stat, StatusBadge, Table, Tabs, Td, Th, Tr, useDebounced, useToast } from "../components/ui";
 import { api, qs, type Paged } from "../lib/api";
 import { formatDate, money, timeAgo } from "../lib/format";
@@ -14,7 +15,7 @@ interface TenantRow {
   currency: string;
   status: string;
   plan: string;
-  trialEndsAt: string | null;
+  planExpiresAt: string | null;
   createdAt: string;
   members: number;
   cashMinor: number;
@@ -52,7 +53,7 @@ function Console() {
   const toast = useToast();
   const { data, isLoading } = useQuery({
     queryKey: ["admin", dq, page],
-    queryFn: () => api.get<Paged<TenantRow> & { stats: { funds: number; active: number; trial: number; suspended: number; users: number } }>(`/admin/tenants${qs({ q: dq, page })}`),
+    queryFn: () => api.get<Paged<TenantRow> & { stats: { funds: number; active: number; free: number; suspended: number; users: number; revenue30d: { currency: string; amountMinor: number }[] } }>(`/admin/tenants${qs({ q: dq, page })}`),
   });
   const setStatus = (t: TenantRow, status: string) => {
     // Suspending or cancelling blocks every write for that fund's staff, so make it deliberate.
@@ -60,7 +61,7 @@ function Console() {
     update.mutate({ id: t.id, status });
   };
   const update = useMutation({
-    mutationFn: ({ id, ...body }: { id: string; status?: string; plan?: string; trialEndsAt?: string }) => api.patch(`/admin/tenants/${id}`, body),
+    mutationFn: ({ id, ...body }: { id: string; status?: string; plan?: string; planExpiresAt?: string | null }) => api.patch(`/admin/tenants/${id}`, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin"] });
       toast("Subscription updated");
@@ -99,8 +100,8 @@ function Console() {
         <>
           <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
             <Stat label="Funds" value={data.stats.funds} />
-            <Stat label="Paying" value={data.stats.active} tone="good" />
-            <Stat label="On trial" value={data.stats.trial} />
+            <Stat label="Paid plans" value={data.stats.active} tone="good" hint={data.stats.revenue30d.length ? `${data.stats.revenue30d.map((r) => money(r.amountMinor, r.currency)).join(" + ")} in 30 days` : "No revenue in 30 days"} />
+            <Stat label="Free plan" value={data.stats.free} />
             <Stat label="Suspended / cancelled" value={data.stats.suspended} tone={data.stats.suspended ? "bad" : undefined} />
             <Stat label="Users" value={data.stats.users} />
           </div>
@@ -116,7 +117,7 @@ function Console() {
                   <Th right>Cash</Th>
                   <Th>Status</Th>
                   <Th>Plan</Th>
-                  <Th>Trial ends</Th>
+                  <Th>Paid until</Th>
                   <Th>Last activity</Th>
                 </tr>
               </thead>
@@ -135,7 +136,7 @@ function Console() {
                       <div className="flex items-center gap-2">
                         <StatusBadge status={t.status} />
                         <Select className="h-10 w-36 sm:h-8 sm:w-32 sm:text-xs" value={t.status} disabled={update.isPending} onChange={(e) => setStatus(t, e.target.value)} aria-label={`Status of ${t.name}`}>
-                          {TENANT_STATUSES.map((s) => (
+                          {TENANT_STATUSES.filter((s) => s !== "trial").map((s) => (
                             <option key={s}>{s}</option>
                           ))}
                         </Select>
@@ -144,18 +145,22 @@ function Console() {
                     <Td>
                       <Select className="h-10 w-36 sm:h-8 sm:w-32 sm:text-xs" value={t.plan} disabled={update.isPending} onChange={(e) => update.mutate({ id: t.id, plan: e.target.value })} aria-label={`Plan of ${t.name}`}>
                         {PLANS.map((p) => (
-                          <option key={p}>{p}</option>
+                          <option key={p} value={p}>
+                            {planInfo(p).name}
+                          </option>
                         ))}
                       </Select>
                     </Td>
                     <Td>
                       <Input
-                        key={t.trialEndsAt ?? "none"}
+                        key={t.planExpiresAt ?? "none"}
                         type="date"
                         className="h-10 w-40 sm:h-8 sm:text-xs"
-                        defaultValue={t.trialEndsAt ?? ""}
-                        onBlur={(e) => e.target.value && e.target.value !== t.trialEndsAt && update.mutate({ id: t.id, trialEndsAt: e.target.value })}
-                        aria-label={`Trial end for ${t.name}`}
+                        defaultValue={t.planExpiresAt ?? ""}
+                        disabled={t.plan === "free"}
+                        title={t.plan === "free" ? "Free never expires" : "Leave empty for no expiry"}
+                        onBlur={(e) => (e.target.value || null) !== t.planExpiresAt && update.mutate({ id: t.id, planExpiresAt: e.target.value || null })}
+                        aria-label={`Paid until for ${t.name}`}
                       />
                     </Td>
                     <Td className="text-xs">{t.lastActivity ? timeAgo(t.lastActivity) : "—"}</Td>

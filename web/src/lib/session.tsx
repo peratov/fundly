@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import type { Role } from "../../../shared/enums";
 import { permissionsFor, type Permission } from "../../../shared/permissions";
+import { planInfo } from "../../../shared/plans";
 import { api, ApiError } from "./api";
 
 export interface FundSummary {
@@ -11,7 +12,7 @@ export interface FundSummary {
   currency: string;
   status: string;
   plan: string;
-  trialEndsAt: string | null;
+  planExpiresAt: string | null;
   membershipId: string;
   memberName: string;
   roles: Role[];
@@ -59,5 +60,7 @@ export function useFund() {
     currency: fund?.currency ?? "GHS",
     can: (p: Permission) => perms.has(p),
     isStaff: perms.size > 0,
+    /** What the fund's plan includes (member limit, online collection, AI). */
+    plan: planInfo(fund?.plan ?? "free"),
   };
 }

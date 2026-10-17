@@ -341,7 +341,7 @@ export default function CircleView() {
                   <Link to={`/signup?${new URLSearchParams({ currency: c.currency, dues: String(c.amountMinor / 100), fund: c.name })}`} className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
                     Upgrade to a AwaFund fund <ArrowRight className="size-4" />
                   </Link>
-                  <p className="mt-2 text-xs text-white/40">14 days free · your circle stays free forever</p>
+                  <p className="mt-2 text-xs text-white/40">Free forever for groups up to 25 · your circle stays free too</p>
                 </>
               ) : (
                 <>
