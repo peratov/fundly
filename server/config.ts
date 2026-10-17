@@ -15,6 +15,10 @@ export interface Config {
   smtpUrl?: string;
   /** Bearer secret for /api/cron/daily (Vercel Cron sends it automatically when CRON_SECRET is set). */
   cronSecret?: string;
+  /** Where "Contact sales" enquiries are emailed. */
+  salesEmail: string;
+  /** Let owners pay for plans themselves (Paystack checkout). Off: plans are sold by the sales team and set in /admin. */
+  selfServeBilling: boolean;
 }
 
 export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
@@ -52,5 +56,7 @@ export function loadConfig(rawEnv: NodeJS.ProcessEnv = process.env): Config {
     resendApiKey: env.RESEND_API_KEY || undefined,
     smtpUrl: env.SMTP_URL || undefined,
     cronSecret: env.CRON_SECRET || undefined,
+    salesEmail: env.SALES_EMAIL ?? "hello@awafund.app",
+    selfServeBilling: env.SELF_SERVE_BILLING === "true",
   };
 }

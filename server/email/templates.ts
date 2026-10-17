@@ -117,3 +117,24 @@ ${items}
   const text = ["Here are your organiser links (new private links; old ones keep working):", "", ...input.links.flatMap((l) => [l.name, `  Organiser: ${l.ownerUrl}`, `  Friends:   ${l.shareUrl}`, ""]), "Didn't ask for this? You can ignore this email."].join("\n");
   return { subject: "Your merry-go-round organiser links", html, text };
 }
+
+/** Internal: a "Contact sales" enquiry, sent to the sales inbox. */
+export function salesInquiryEmail(i: { name: string; email: string; phone?: string; fundName?: string; members?: number; plan?: string; message?: string; source: string; fundId?: string }) {
+  const rows: [string, string | undefined][] = [
+    ["Name", i.name],
+    ["Email", i.email],
+    ["Phone", i.phone],
+    ["Fund", i.fundName],
+    ["Members", i.members?.toString()],
+    ["Interested in", i.plan ? i.plan[0].toUpperCase() + i.plan.slice(1) : undefined],
+    ["From", i.source === "pricing" ? "Pricing page" : i.source === "billing" ? "In-app Plan & billing" : "In-app upgrade prompt"],
+    ["Fund ID", i.fundId],
+  ];
+  const filled = rows.filter(([, v]) => v);
+  const title = `Sales enquiry: ${i.fundName || i.name}${i.members ? ` (${i.members} members)` : ""}`;
+  const body = `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:15px">${filled
+    .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#5b6475;white-space:nowrap">${esc(k)}</td><td style="padding:6px 0;font-weight:600">${esc(v!)}</td></tr>`)
+    .join("")}</table>${i.message ? `<p style="margin:18px 0 0;padding:14px 16px;background:#f4f1ea;border-radius:12px;white-space:pre-wrap">${esc(i.message)}</p>` : ""}`;
+  const text = filled.map(([k, v]) => `${k}: ${v}`).join("\n") + (i.message ? `\n\n${i.message}` : "");
+  return { subject: title, html: layout(title, body), text, tag: "sales-inquiry" };
+}

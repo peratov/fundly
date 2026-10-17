@@ -246,3 +246,18 @@ export const circleUpdateSchema = z.object({
 });
 
 export type CircleBody = z.infer<typeof circleBodySchema>;
+
+// ---------------------------------------------------------------- sales enquiries
+
+export const salesInquirySchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  email,
+  phone: phone.optional().or(z.literal("").transform(() => undefined)),
+  fundName: z.string().trim().max(100).optional(),
+  members: z.number().int().min(1).max(1_000_000).optional(),
+  plan: z.enum(["growth", "pro"]).optional(),
+  message: z.string().trim().max(1000).optional(),
+  /** Where the enquiry started, for reporting. */
+  source: z.enum(["pricing", "billing", "upgrade"]).default("pricing"),
+});
+export type SalesInquiry = z.infer<typeof salesInquirySchema>;

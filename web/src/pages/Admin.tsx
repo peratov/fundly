@@ -187,7 +187,7 @@ interface LeadRow {
   source: string;
   marketingConsent: boolean;
   convertedUserId: string | null;
-  meta: { circleName?: string; members?: number; currency?: string; amountMinor?: number; frequency?: string } | null;
+  meta: { circleName?: string; members?: number; currency?: string; amountMinor?: number; frequency?: string; fundName?: string; plan?: string; message?: string; from?: string } | null;
   createdAt: string;
   circles: number;
   views: number;
@@ -233,7 +233,7 @@ function Leads() {
           <thead>
             <tr>
               <Th>Lead</Th>
-              <Th>Circle</Th>
+              <Th>Interest</Th>
               <Th right>Circles</Th>
               <Th right>Link views</Th>
               <Th>Marketing</Th>
@@ -252,7 +252,18 @@ function Leads() {
                   </p>
                 </Td>
                 <Td>
-                  <p>{l.meta?.circleName ?? "—"}</p>
+                  {l.source === "sales" ? (
+                    <>
+                      <p className="flex items-center gap-2">
+                        <Badge tone="violet">Sales</Badge> {l.meta?.fundName ?? "—"}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {[l.meta?.members && `${l.meta.members} members`, l.meta?.plan && `wants ${l.meta.plan}`, l.meta?.message].filter(Boolean).join(" · ") || "No details"}
+                      </p>
+                    </>
+                  ) : (
+                    <p>{l.meta?.circleName ?? "—"}</p>
+                  )}
                   {l.meta?.members && l.meta.amountMinor ? (
                     <p className="text-xs text-slate-500">
                       {l.meta.members} friends · {money(l.meta.amountMinor, l.meta.currency ?? "GHS")} {l.meta.frequency}

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { createApp } from "../server/app";
 import { tenants } from "../server/db/schema";
-import { loadConfig } from "../server/config";
+import { loadConfig, type Config } from "../server/config";
 import { openDb, type DbHandle } from "../server/db/client";
 import { templateAssistant } from "../server/lib/assistant";
 import type { Clock } from "../server/lib/context";
@@ -17,11 +17,11 @@ export interface TestEnv {
   mailer: ReturnType<typeof devMailer>;
 }
 
-export async function setup(now = "2026-05-26T10:00:00Z", overrides: { payments?: PaymentProvider } = {}): Promise<TestEnv> {
+export async function setup(now = "2026-05-26T10:00:00Z", overrides: { payments?: PaymentProvider; config?: Partial<Config> } = {}): Promise<TestEnv> {
   const handle = await openDb();
   let current = new Date(now);
   const clock = { now: () => current, set: (d: string) => (current = new Date(d)) };
-  const config = { ...loadConfig({ NODE_ENV: "test", APP_URL: "http://localhost:5173" }), platformAdminEmails: ["root@awafund.test"], sessionDays: 365 };
+  const config = { ...loadConfig({ NODE_ENV: "test", APP_URL: "http://localhost:5173" }), platformAdminEmails: ["root@awafund.test"], sessionDays: 365, ...overrides.config };
   const mailer = devMailer();
   const app = createApp({ db: handle.db, config, clock, payments: overrides.payments ?? mockProvider(), assistant: templateAssistant, mailer });
   return { app, handle, clock, mailer };

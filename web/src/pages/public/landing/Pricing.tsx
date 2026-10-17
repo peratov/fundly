@@ -1,15 +1,16 @@
-import { ArrowRight, Check, ChevronDown, Infinity as InfinityIcon, Minus, Rocket, ShieldCheck, Smartphone, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Infinity as InfinityIcon, MessageCircle, Minus, Rocket, ShieldCheck, Smartphone, Sparkles, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router";
-import { PLANS, PRICE_CURRENCIES, priceFor, recommendPlan, type BillingInterval, type PlanId } from "../../../../../shared/plans";
+import { PLANS, recommendPlan, type PaidPlanId, type PlanId } from "../../../../../shared/plans";
+import { ContactSalesModal } from "../../../components/ContactSales";
 import { clsx } from "../../../components/ui";
-import { money } from "../../../lib/format";
-import { Confetti, CountUp, Reveal } from "../../../lib/motion";
+import { Confetti, Reveal } from "../../../lib/motion";
 
 /*
- * The pricing section is a calculator, not a table: visitors drag in their member count,
- * say whether they want members paying by mobile money, and see exactly what they'd pay.
- * Every number comes from shared/plans.ts, the same source the server bills from.
+ * The pricing section is a plan finder: visitors drag in their member count and say
+ * whether they want members paying by mobile money, and see which plan fits. Free is
+ * free; paid plans are priced with each fund, so they lead to "Contact sales".
+ * Limits come from shared/plans.ts, the same source the server enforces.
  */
 
 // Slider position (0-100) to members, with more travel where the plan boundaries are.
@@ -26,26 +27,13 @@ function toPos(members: number) {
   return GROWTH_AT + ((members - 150) / 350) * (100 - GROWTH_AT);
 }
 
-function guessCurrency() {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (tz === "Africa/Accra") return "GHS";
-    if (tz === "Africa/Lagos") return "NGN";
-    if (tz === "Africa/Nairobi") return "KES";
-  } catch {
-    /* default below */
-  }
-  return "GHS";
-}
-
 const ICON: Record<PlanId, ReactNode> = { free: <Users />, growth: <Rocket />, pro: <InfinityIcon /> };
 const GLOW: Record<PlanId, string> = { free: "from-brand-400 to-brand-600", growth: "from-brand-400 via-grape-500 to-grape-700", pro: "from-coral-500 to-sun-400" };
 
 export function Pricing() {
   const [members, setMembers] = useState(18);
   const [momo, setMomo] = useState(false);
-  const [interval, setInterval] = useState<BillingInterval>("year");
-  const [currency, setCurrency] = useState(guessCurrency);
+  const [sales, setSales] = useState<PaidPlanId | null>(null);
   const plan = recommendPlan(members, momo);
 
   // A little celebration whenever the answer becomes "free".
@@ -55,10 +43,6 @@ export function Pricing() {
     if (plan === "free" && prev.current !== "free") setBurst((b) => b + 1);
     prev.current = plan;
   }, [plan]);
-
-  const price = plan === "free" ? null : priceFor(plan, interval, currency);
-  const monthly = price ? (interval === "year" ? price.amountMinor / 12 : price.amountMinor) : 0;
-  const perMember = price ? monthly / members : 0;
 
   return (
     <section id="pricing" className="relative overflow-hidden bg-[#fbfaf7] py-24 text-slate-900 sm:py-32 dark:bg-slate-950 dark:text-white">
@@ -79,18 +63,9 @@ export function Pricing() {
           <div className="grid overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 shadow-slate-900/10 ring-slate-200 lg:grid-cols-[1.15fr_1fr] dark:bg-slate-900 dark:ring-slate-800">
             {/* Inputs */}
             <div className="p-6 sm:p-10">
-              <div className="flex items-center justify-between gap-4">
-                <label htmlFor="members" className="text-sm font-semibold text-slate-500">
-                  How many members in your fund?
-                </label>
-                <div className="flex gap-1 rounded-full bg-slate-100 p-1 dark:bg-slate-800" role="radiogroup" aria-label="Currency">
-                  {PRICE_CURRENCIES.map((c) => (
-                    <button key={c} role="radio" aria-checked={currency === c} onClick={() => setCurrency(c)} className={clsx("rounded-full px-2.5 py-1 text-[11px] font-bold transition", currency === c ? "bg-white text-ink-950 shadow dark:bg-slate-950 dark:text-white" : "text-slate-500")}>
-                      {c}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <label htmlFor="members" className="text-sm font-semibold text-slate-500">
+                How many members in your fund?
+              </label>
               <p className="mt-3 font-display text-7xl font-extrabold tracking-tight tabular-nums sm:text-8xl">
                 {members}
                 {members >= 500 && "+"}
@@ -151,38 +126,22 @@ export function Pricing() {
               <div className={clsx("pointer-events-none absolute -top-24 -right-20 size-80 rounded-full bg-gradient-to-br opacity-40 blur-3xl transition-all duration-700", GLOW[plan])} aria-hidden />
               {burst > 0 && plan === "free" && <Confetti key={burst} pieces={40} />}
               <div className="relative flex h-full flex-col">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs font-bold tracking-[0.2em] text-white/50 uppercase">Your fund on</p>
-                  <div className="flex gap-1 rounded-full bg-white/10 p-1" role="radiogroup" aria-label="Billing period">
-                    {(["month", "year"] as BillingInterval[]).map((v) => (
-                      <button key={v} role="radio" aria-checked={interval === v} onClick={() => setInterval(v)} className={clsx("rounded-full px-3 py-1 text-xs font-bold transition", interval === v ? "bg-white text-ink-950" : "text-white/60")}>
-                        {v === "month" ? "Monthly" : "Yearly −17%"}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <p className="text-xs font-bold tracking-[0.2em] text-white/50 uppercase">Your fund belongs on</p>
                 <div key={plan} className="mt-4 flex animate-pop items-center gap-3">
                   <span className={clsx("flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg [&>svg]:size-6", GLOW[plan])}>{ICON[plan]}</span>
                   <p className="font-display text-4xl font-extrabold">{PLANS[plan].name}</p>
                 </div>
 
-                <div className="mt-8">
-                  {price ? (
+                <div key={`${plan}-answer`} className="mt-8 animate-pop">
+                  {plan === "free" ? (
                     <>
-                      <p className="flex items-end gap-2">
-                        <span className="font-display text-6xl font-extrabold tracking-tight">
-                          <CountUp key={`${plan}${currency}${interval}`} value={monthly} duration={600} format={(n) => money(Math.round(n), currency)} />
-                        </span>
-                        <span className="pb-2 text-white/50">/month</span>
-                      </p>
-                      <p className="mt-2 text-sm text-sun-300">
-                        That's {money(Math.max(1, Math.round(perMember)), currency)} per member a month{interval === "year" ? `, billed ${money(price.amountMinor, currency)} yearly` : ""}.
-                      </p>
+                      <p className="font-display text-6xl font-extrabold tracking-tight">Free</p>
+                      <p className="mt-2 text-sm text-brand-300">Not a trial. Free for as long as your fund has 25 members or fewer.</p>
                     </>
                   ) : (
                     <>
-                      <p className="font-display text-6xl font-extrabold tracking-tight">{money(0, currency)}</p>
-                      <p className="mt-2 text-sm text-brand-300">Not a trial. Free for as long as your fund has 25 members or fewer.</p>
+                      <p className="font-display text-6xl font-extrabold tracking-tight">Let's talk</p>
+                      <p className="mt-2 text-sm text-sun-300">{PLANS[plan].name} is priced with your fund, around your size and how you collect. Our team will put together a plan that fits.</p>
                     </>
                   )}
                 </div>
@@ -198,18 +157,38 @@ export function Pricing() {
                   ))}
                 </ul>
 
-                <Link to="/signup" className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
-                  <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                  <span className="relative">{plan === "free" ? "Start free, no card" : "Start free, upgrade in two taps"}</span>
-                  <ArrowRight className="relative size-5 transition group-hover:translate-x-1" />
-                </Link>
-                <p className="mt-3 text-center text-xs text-white/40">Every fund starts on Free. Upgrade from inside the app whenever you're ready.</p>
+                {plan === "free" ? (
+                  <Link to="/signup" className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
+                    <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                    <span className="relative">Start free, no card</span>
+                    <ArrowRight className="relative size-5 transition group-hover:translate-x-1" />
+                  </Link>
+                ) : (
+                  <button onClick={() => setSales(plan)} className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
+                    <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                    <MessageCircle className="relative size-5" />
+                    <span className="relative">Contact sales</span>
+                  </button>
+                )}
+                <p className="mt-3 text-center text-xs text-white/40">
+                  {plan === "free" ? (
+                    "Every fund starts on Free. No card, no time limit."
+                  ) : (
+                    <>
+                      Or{" "}
+                      <Link to="/signup" className="font-semibold text-white/70 underline-offset-2 hover:text-white hover:underline">
+                        start free today
+                      </Link>{" "}
+                      and move up when you're ready.
+                    </>
+                  )}
+                </p>
               </div>
             </div>
           </div>
         </Reveal>
 
-        <PlanRow active={plan} currency={currency} interval={interval} onPick={(p) => (p === "free" ? (setMembers(Math.min(members, 25)), setMomo(false)) : p === "growth" ? (setMembers(Math.min(Math.max(members, 26), 150)), setMomo(true)) : setMembers(Math.max(members, 151)))} />
+        <PlanRow active={plan} onContact={setSales} onPick={(p) => (p === "free" ? (setMembers(Math.min(members, 25)), setMomo(false)) : p === "growth" ? (setMembers(Math.min(Math.max(members, 26), 150)), setMomo(true)) : setMembers(Math.max(members, 151)))} />
 
         <Reveal className="mt-10 grid gap-4 sm:grid-cols-3">
           {[
@@ -229,6 +208,7 @@ export function Pricing() {
 
         <Compare />
       </div>
+      {sales && <ContactSalesModal open onClose={() => setSales(null)} defaults={{ plan: sales, members, source: "pricing" }} />}
     </section>
   );
 }
@@ -260,19 +240,21 @@ function Seats({ members }: { members: number }) {
   );
 }
 
-function PlanRow({ active, currency, interval, onPick }: { active: PlanId; currency: string; interval: BillingInterval; onPick: (p: PlanId) => void }) {
+function PlanRow({ active, onPick, onContact }: { active: PlanId; onPick: (p: PlanId) => void; onContact: (p: PaidPlanId) => void }) {
   return (
     <div className="mt-10 grid gap-4 md:grid-cols-3">
       {(["free", "growth", "pro"] as PlanId[]).map((id, i) => {
         const p = PLANS[id];
         const on = id === active;
-        const price = id === "free" ? null : priceFor(id, interval, currency);
         return (
           <Reveal key={id} delay={i * 80}>
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               onClick={() => onPick(id)}
+              onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), onPick(id))}
               className={clsx(
-                "group relative flex h-full w-full flex-col rounded-3xl bg-white p-6 text-left ring-1 transition duration-300 dark:bg-slate-900",
+                "group relative flex h-full w-full cursor-pointer flex-col rounded-3xl bg-white p-6 text-left ring-1 transition duration-300 dark:bg-slate-900",
                 on ? "scale-[1.02] shadow-2xl ring-2 shadow-grape-500/15 ring-grape-400" : "opacity-80 ring-slate-200 hover:opacity-100 dark:ring-slate-800",
               )}
               aria-pressed={on}
@@ -286,8 +268,13 @@ function PlanRow({ active, currency, interval, onPick }: { active: PlanId; curre
                 </div>
               </div>
               <p className="mt-5 font-display text-3xl font-extrabold tracking-tight">
-                {price ? money(Math.round(interval === "year" ? price.amountMinor / 12 : price.amountMinor), price.currency) : "Free"}
-                <span className="text-sm font-medium text-slate-500">{price ? " /month" : " forever"}</span>
+                {id === "free" ? (
+                  <>
+                    Free<span className="text-sm font-medium text-slate-500"> forever</span>
+                  </>
+                ) : (
+                  "Custom pricing"
+                )}
               </p>
               <ul className="mt-5 space-y-2 text-sm">
                 {p.highlights.map((h) => (
@@ -296,7 +283,18 @@ function PlanRow({ active, currency, interval, onPick }: { active: PlanId; curre
                   </li>
                 ))}
               </ul>
-            </button>
+              {id !== "free" && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onContact(id);
+                  }}
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-ink-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950"
+                >
+                  <MessageCircle className="size-4" /> Contact sales
+                </button>
+              )}
+            </div>
           </Reveal>
         );
       })}

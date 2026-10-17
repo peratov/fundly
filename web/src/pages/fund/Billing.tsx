@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarClock, Check, CreditCard, Gem, Infinity as InfinityIcon, Rocket, ShieldCheck, Smartphone, Sparkles, Users } from "lucide-react";
+import { CalendarClock, Check, CreditCard, Gem, Infinity as InfinityIcon, MessageCircle, Rocket, ShieldCheck, Smartphone, Sparkles, Users } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
 import { PLANS, type BillingInterval, type PaidPlanId, type PlanId } from "../../../../shared/plans";
@@ -9,6 +9,7 @@ import { formatDate, money } from "../../lib/format";
 import { useFundQuery } from "../../lib/hooks";
 import { Confetti } from "../../lib/motion";
 import { useFund } from "../../lib/session";
+import { ContactSalesModal } from "../../components/ContactSales";
 
 type Price = { amountMinor: number; currency: string; months: number };
 interface BillingData {
@@ -18,7 +19,9 @@ interface BillingData {
   inGrace: boolean;
   graceEndsOn: string | null;
   usage: { members: number; limit: number | null };
-  prices: Record<PaidPlanId, Record<BillingInterval, Price>>;
+  /** Only when self-serve billing is on; otherwise paid plans are sold by the sales team. */
+  prices: Record<PaidPlanId, Record<BillingInterval, Price>> | null;
+  selfServe: boolean;
   history: { id: string; reference: string; plan: PaidPlanId; interval: BillingInterval; months: number; amountMinor: number; currency: string; status: string; paidThrough: string | null; createdAt: string }[];
   simulated: boolean;
 }
@@ -35,7 +38,8 @@ const ICONS: Record<PlanId, ReactNode> = { free: <Users />, growth: <Rocket />, 
 const ACCENT: Record<PlanId, string> = { free: "from-slate-400 to-slate-600", growth: "from-brand-400 to-grape-600", pro: "from-coral-500 to-sun-400" };
 
 export default function Billing() {
-  const { base } = useFund();
+  const { base, me, fund, tenantId } = useFund();
+  const [sales, setSales] = useState<PaidPlanId | null>(null);
   const qc = useQueryClient();
   const toast = useToast();
   const [params, setParams] = useSearchParams();
@@ -86,9 +90,13 @@ export default function Billing() {
       <div className="mt-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h2 className="font-display text-2xl font-bold tracking-tight">{data.plan === "free" ? "Ready to grow?" : "Change or extend your plan"}</h2>
-          <p className="mt-1 text-sm text-slate-500">Prices in {data.prices.growth.month.currency}. Pay by mobile money or card. No contract; your plan simply runs until the date you've paid for.</p>
+          <p className="mt-1 text-sm text-slate-500">
+            {data.prices
+              ? `Prices in ${data.prices.growth.month.currency}. Pay by mobile money or card. No contract; your plan simply runs until the date you've paid for.`
+              : "Growth and Pro are priced with each fund. Tell us about yours and our team will set you up; your records stay exactly where they are."}
+          </p>
         </div>
-        <IntervalToggle value={interval} onChange={setInterval} />
+        {data.prices && <IntervalToggle value={interval} onChange={setInterval} />}
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
@@ -98,11 +106,12 @@ export default function Billing() {
             id={id}
             current={data.plan}
             interval={interval}
-            price={id === "free" ? null : data.prices[id][interval]}
-            monthly={id === "free" ? null : data.prices[id].month}
+            price={id === "free" || !data.prices ? null : data.prices[id][interval]}
+            monthly={id === "free" || !data.prices ? null : data.prices[id].month}
             members={data.usage.members}
+            salesLed={!data.selfServe}
             busy={start.isPending && start.variables === id}
-            onChoose={() => id !== "free" && start.mutate(id)}
+            onChoose={() => id !== "free" && (data.selfServe ? start.mutate(id) : setSales(id))}
           />
         ))}
       </div>
@@ -110,7 +119,11 @@ export default function Billing() {
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Assurance icon={<ShieldCheck />} title="Your data is never held hostage">If a plan lapses you keep every record. After 7 days' grace the fund simply moves to Free.</Assurance>
         <Assurance icon={<Smartphone />} title="0% markup on collections">Members pay the mobile money provider's standard fee. AwaFund takes nothing on top.</Assurance>
-        <Assurance icon={<CalendarClock />} title="Renew early, lose nothing">Paying before your plan ends adds the new time to what's left.</Assurance>
+        {data.selfServe ? (
+          <Assurance icon={<CalendarClock />} title="Renew early, lose nothing">Paying before your plan ends adds the new time to what's left.</Assurance>
+        ) : (
+          <Assurance icon={<MessageCircle />} title="A person, not a paywall">Our team helps you pick the right plan and switches it on for you.</Assurance>
+        )}
       </div>
 
       {data.history.length > 0 && (
@@ -159,6 +172,13 @@ export default function Billing() {
         />
       )}
       {celebrate && <Welcome plan={celebrate} onClose={() => setCelebrate(null)} />}
+      {sales && (
+        <ContactSalesModal
+          open
+          onClose={() => setSales(null)}
+          defaults={{ plan: sales, members: data.usage.members, name: me?.user.name, email: me?.user.email, fundName: fund?.name, fundId: tenantId, source: "billing" }}
+        />
+      )}
     </>
   );
 }
@@ -239,12 +259,25 @@ function IntervalToggle({ value, onChange }: { value: BillingInterval; onChange:
   );
 }
 
-function PlanCard({ id, current, interval, price, monthly, members, busy, onChoose }: { id: PlanId; current: PlanId; interval: BillingInterval; price: Price | null; monthly: Price | null; members: number; busy: boolean; onChoose: () => void }) {
+function PlanCard({ id, current, interval, price, monthly, members, salesLed, busy, onChoose }: { id: PlanId; current: PlanId; interval: BillingInterval; price: Price | null; monthly: Price | null; members: number; salesLed: boolean; busy: boolean; onChoose: () => void }) {
   const plan = PLANS[id];
   const isCurrent = id === current;
   const tooSmall = plan.memberLimit !== null && members > plan.memberLimit;
   const featured = id === "growth";
-  const label = id === "free" ? (isCurrent ? "Your plan" : "Included free") : tooSmall ? `For up to ${plan.memberLimit} members` : isCurrent ? "Extend" : RANK[id] > RANK[current] ? `Upgrade to ${plan.name}` : `Switch to ${plan.name}`;
+  const label =
+    id === "free"
+      ? isCurrent
+        ? "Your plan"
+        : "Included free"
+      : tooSmall
+        ? `For up to ${plan.memberLimit} members`
+        : salesLed
+          ? "Contact sales"
+          : isCurrent
+            ? "Extend"
+            : RANK[id] > RANK[current]
+              ? `Upgrade to ${plan.name}`
+              : `Switch to ${plan.name}`;
   return (
     <div className={clsx("relative flex flex-col rounded-3xl bg-white p-6 ring-1 transition dark:bg-slate-900", featured ? "shadow-xl shadow-grape-500/10 ring-2 ring-grape-400" : "ring-slate-200 dark:ring-slate-800", isCurrent && "ring-2 ring-brand-500")}>
       {featured && !isCurrent && <span className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-brand-500 to-grape-600 px-3 py-1 text-xs font-bold text-white">Most popular</span>}
@@ -257,7 +290,12 @@ function PlanCard({ id, current, interval, price, monthly, members, busy, onChoo
         </div>
       </div>
       <div className="mt-6 min-h-[4.5rem]">
-        {price ? (
+        {id !== "free" && !price ? (
+          <>
+            <p className="font-display text-3xl font-extrabold tracking-tight">Custom pricing</p>
+            <p className="mt-1 text-xs text-slate-500">Priced with your fund. Talk to our team.</p>
+          </>
+        ) : price ? (
           <>
             <p className="flex items-end gap-1">
               <span key={`${id}${interval}`} className="animate-pop font-display text-4xl font-extrabold tracking-tight">
@@ -289,7 +327,7 @@ function PlanCard({ id, current, interval, price, monthly, members, busy, onChoo
           </li>
         ))}
       </ul>
-      <Button className="mt-6 w-full justify-center" variant={featured && !isCurrent ? "primary" : "secondary"} disabled={id === "free" || tooSmall} loading={busy} onClick={onChoose} icon={id !== "free" && !tooSmall ? <CreditCard className="size-4" /> : undefined}>
+      <Button className="mt-6 w-full justify-center" variant={featured && !isCurrent ? "primary" : "secondary"} disabled={id === "free" || tooSmall} loading={busy} onClick={onChoose} icon={id !== "free" && !tooSmall ? salesLed ? <MessageCircle className="size-4" /> : <CreditCard className="size-4" /> : undefined}>
         {label}
       </Button>
     </div>

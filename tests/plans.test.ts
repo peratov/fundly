@@ -99,13 +99,13 @@ describe("Free plan", () => {
   });
 });
 
-describe("Upgrading, renewing and lapsing", () => {
+describe("Upgrading, renewing and lapsing (self-serve billing enabled)", () => {
   let env: TestEnv;
   let owner: Client;
   let base: string;
   let tenantId: string;
   beforeAll(async () => {
-    env = await setup();
+    env = await setup(undefined, { config: { selfServeBilling: true } });
     ({ c: owner, base, tenantId } = await freeFund(env, "grow@fund.test"));
     await fill(owner, base, 24, "Grow");
   });
@@ -189,7 +189,7 @@ describe("Paystack subscription checkout and webhook", () => {
       calls.push({ url, body });
       return new Response(JSON.stringify({ status: true, data: { authorization_url: `https://checkout.paystack.com/${body.reference}` } }), { status: 200 });
     }) as typeof fetch;
-    env = await setup(undefined, { payments: paystackProvider(SECRET, fakeFetch) });
+    env = await setup(undefined, { payments: paystackProvider(SECRET, fakeFetch), config: { selfServeBilling: true } });
     ({ c: owner, base } = await freeFund(env, "paystack@fund.test"));
   });
   afterAll(async () => env.handle.close());
@@ -220,5 +220,48 @@ describe("Paystack subscription checkout and webhook", () => {
     const b = await owner.get(`${base}/billing`);
     expect(b.body.history.find((h: { reference: string }) => h.reference === co.body.reference).status).toBe("failed");
     expect(b.body.planExpiresAt).toBe("2026-06-26");
+  });
+});
+
+describe("Contact sales (the default)", () => {
+  let env: TestEnv;
+  let owner: Client;
+  let base: string;
+  beforeAll(async () => {
+    env = await setup(undefined, { config: { salesEmail: "sales@awafund.test" } });
+    ({ c: owner, base } = await freeFund(env, "sales@fund.test"));
+  });
+  afterAll(async () => env.handle.close());
+
+  it("quotes no prices and hides self-serve checkout", async () => {
+    const b = await owner.get(`${base}/billing`);
+    expect(b.status).toBe(200);
+    expect(b.body.selfServe).toBe(false);
+    expect(b.body.prices).toBeNull();
+    expect(b.body.usage).toEqual({ members: 1, limit: 25 });
+    expect((await owner.post(`${base}/billing/checkout`, { plan: "growth", interval: "month" })).status).toBe(404);
+    expect((await owner.post(`${base}/billing/simulate`, { reference: "AWA-SUB-XXXXXXXX", outcome: "succeeded" })).status).toBe(404);
+  });
+
+  it("records a sales enquiry as a lead and emails the sales inbox", async () => {
+    const visitor = client(env);
+    const r = await visitor.post("/api/public/sales", { name: "Kojo Mensah", email: "kojo@alumni.test", phone: "+233201234567", fundName: "Achimota '05", members: 140, plan: "growth", message: "We collect dues monthly.", source: "pricing" });
+    expect(r.status, r.text).toBe(201);
+    const mail = env.mailer.outbox[0];
+    expect(mail.to).toBe("sales@awafund.test");
+    expect(mail.subject).toContain("Achimota '05");
+    expect(mail.text).toContain("Members: 140");
+    expect(mail.html).toContain("We collect dues monthly.");
+    // A second enquiry from the same person updates their lead instead of duplicating it.
+    expect((await visitor.post("/api/public/sales", { name: "Kojo Mensah", email: "kojo@alumni.test", members: 160, source: "billing" })).status).toBe(201);
+    const root = client(env);
+    await root.post("/api/auth/signup", { name: "Platform Root", email: "root@awafund.test", password: "root-password-1", fund: { name: "Ops", currency: "GHS", minContributionMinor: 100, sharePriceMinor: 100 } });
+    const leads = await root.get("/api/admin/leads?q=kojo");
+    expect(leads.body.total).toBe(1);
+    expect(leads.body.items[0]).toMatchObject({ source: "sales", meta: { members: 160 } });
+  });
+
+  it("validates enquiries", async () => {
+    expect((await client(env).post("/api/public/sales", { name: "K", email: "not-an-email" })).status).toBe(422);
   });
 });

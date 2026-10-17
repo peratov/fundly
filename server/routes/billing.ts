@@ -5,17 +5,30 @@ import { BILLING_INTERVALS, PAID_PLANS } from "../../shared/plans";
 import { billingPayments, users } from "../db/schema";
 import { requirePerm } from "../lib/auth";
 import { actorOf, type AppEnv, today } from "../lib/context";
-import { conflict, parseBody } from "../lib/http";
+import { conflict, notFound, parseBody } from "../lib/http";
+import type { MiddlewareHandler } from "hono";
 import { assertPendingCheckout, billingOverview, completeBillingPayment, startCheckout } from "../services/billing";
 
 /** A fund's plan and subscription: owners see usage, pay, renew and upgrade here. */
 export const billingRoutes = new Hono<AppEnv>();
 
+const selfServeOnly: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (!c.get("deps").config.selfServeBilling) throw notFound("Page");
+  await next();
+};
+
 billingRoutes.get("/", async (c) => {
   requirePerm(c, "settings:write");
   const deps = c.get("deps");
-  return c.json({ ...(await billingOverview(deps.db, c.get("tenant"), today(c))), simulated: deps.payments.simulated });
+  const { prices, ...overview } = await billingOverview(deps.db, c.get("tenant"), today(c));
+  const selfServe = deps.config.selfServeBilling;
+  return c.json({ ...overview, selfServe, prices: selfServe ? prices : null, simulated: deps.payments.simulated });
 });
+
+// Paid plans are sold by the sales team (Contact sales) unless SELF_SERVE_BILLING=true.
+billingRoutes.use("/checkout", selfServeOnly);
+billingRoutes.use("/verify", selfServeOnly);
+billingRoutes.use("/simulate", selfServeOnly);
 
 billingRoutes.post("/checkout", async (c) => {
   requirePerm(c, "settings:write");

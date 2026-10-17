@@ -105,23 +105,26 @@ The homepage shows the real app, not mock-ups. The phone in the hero and the pro
 
 ## Plans and billing
 
-| Plan | Members | Price (monthly, or 10× for a year) | Adds |
+| Plan | Members | Price | Adds |
 |---|---|---|---|
 | **Free** | up to 25 | free forever | All the core tools: dues, loans with committee reviews, welfare, shares, double-entry books, member app, import/export, audit trail. Payments are recorded by the treasurer. |
-| **Growth** | up to 150 | GHS 199 · NGN 22,000 · KES 1,900 · USD 15 | Members pay by mobile money in the app, with automatic posting; AI-written credit assessments and reminder drafts. |
-| **Pro** | unlimited | GHS 499 · NGN 59,000 · KES 4,990 · USD 39 | Priority support, guided onboarding and migration. |
+| **Growth** | up to 150 | Contact sales | Members pay by mobile money in the app, with automatic posting; AI-written credit assessments and reminder drafts. |
+| **Pro** | unlimited | Contact sales | Priority support, guided onboarding and migration. |
 
 - **One source of truth:** limits and prices live in `shared/plans.ts`. The server enforces them (`server/services/billing.ts`); the pricing page and the in-app prompts read the same file.
 - **What the server enforces:**
   - adding a member past the limit, one at a time or by import, returns `402 plan_limit`;
   - starting an in-app payment on Free returns `402 plan_feature`;
   - Free funds get the template assistant instead of Claude.
-- **Billing:** owners pay from **Plan & billing** (`/f/:id/billing`) through Paystack's hosted checkout (`/transaction/initialize`), by mobile money or card.
+- **Selling paid plans:** by default, paid plans are sales-led.
+  - "Contact sales" on the pricing page and in **Plan & billing** sends `POST /api/public/sales`. Each enquiry is saved as a lead (shown in `/admin` → Leads) and emailed to `SALES_EMAIL`.
+  - When a deal closes, set the fund's plan and "paid until" date in `/admin`.
+- **Self-serve checkout** (optional, `SELF_SERVE_BILLING=true`): owners pay from **Plan & billing** (`/f/:id/billing`) at the prices in `shared/plans.ts`, through Paystack's hosted checkout (`/transaction/initialize`), by mobile money or card.
   - Subscription references start with `AWA-SUB-`, and the webhook routes them to billing rather than to member payments.
   - Payments are verified for amount and are idempotent.
   - Paid time stacks when renewing early; an upgrade starts the new plan immediately.
 - **Expiry:** the daily job sends reminders 7 days, 1 day and 0 days before a plan ends. After a 7-day grace period the fund moves to Free. Nothing is deleted.
-- **Currency:** prices are charged in the fund's currency when it's in the price table (GHS, NGN, KES, USD), otherwise in USD. Your Paystack account must be enabled for the currencies you sell in.
+- **Currency (self-serve only):** prices are charged in the fund's currency when it's in the price table (GHS, NGN, KES, USD), otherwise in USD. Your Paystack account must be enabled for the currencies you sell in.
 - **Operator controls:** platform admins can set any fund's plan and "paid until" date in `/admin`. An empty date means no expiry, for comped or invoiced customers.
 - **Without Paystack:** checkout opens a simulator in development.
 

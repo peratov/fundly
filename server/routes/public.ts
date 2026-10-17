@@ -1,13 +1,13 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { Hono } from "hono";
-import { circleCreateSchema, circleUpdateSchema } from "../../shared/schemas";
+import { circleCreateSchema, circleUpdateSchema, salesInquirySchema } from "../../shared/schemas";
 import { circles, leads } from "../db/schema";
 import type { AppEnv, Ctx } from "../lib/context";
 import { randomToken, safeEqualHex, sha256 } from "../lib/crypto";
 import { forbidden, notFound, parseBody } from "../lib/http";
 import { rateLimit } from "../lib/rate-limit";
-import { organiserLinkEmail, recoveryEmail } from "../email/templates";
+import { organiserLinkEmail, recoveryEmail, salesInquiryEmail } from "../email/templates";
 
 /**
  * Free, unauthenticated growth tools. The organiser proves ownership of a
@@ -16,10 +16,12 @@ import { organiserLinkEmail, recoveryEmail } from "../email/templates";
  */
 export const publicRoutes = new Hono<AppEnv>();
 
+const LEAD_SOURCE_SALES = "sales";
 export const LEAD_SOURCE_CIRCLE = "merry-go-round";
 const limitCreate = rateLimit({ windowMs: 60 * 60_000, max: 10, key: "circle-create" });
 const limitWrite = rateLimit({ windowMs: 60_000, max: 60, key: "circle-write" });
 const limitRecover = rateLimit({ windowMs: 60 * 60_000, max: 5, key: "circle-recover" });
+const limitSales = rateLimit({ windowMs: 60 * 60_000, max: 8, key: "sales-inquiry" });
 const MAX_EXTRA_TOKENS = 5;
 
 function slug() {
@@ -151,4 +153,28 @@ publicRoutes.patch("/circles/:slug", limitWrite, async (c) => {
   );
   const [updated] = await c.get("deps").db.update(circles).set({ data, payments, updatedAt: new Date() }).where(eq(circles.id, row.id)).returning();
   return c.json(view(updated, true));
+});
+
+/**
+ * "Contact sales" from the pricing page or inside the app. Saved as a lead (visible in
+ * the operator console) and emailed to the sales inbox. The answer is the same whether
+ * or not the email could be sent, so a mail outage never loses the enquiry.
+ */
+publicRoutes.post("/sales", limitSales, async (c) => {
+  const input = await parseBody(c, salesInquirySchema.extend({ fundId: z.string().uuid().optional() }));
+  const { db, mailer, config } = c.get("deps");
+  const meta = { fundName: input.fundName, members: input.members, plan: input.plan, message: input.message, from: input.source, fundId: input.fundId };
+  await db
+    .insert(leads)
+    .values({ email: input.email, name: input.name, phone: input.phone ?? null, source: LEAD_SOURCE_SALES, meta })
+    .onConflictDoUpdate({
+      target: [leads.email, leads.source],
+      set: { name: input.name, phone: sql`coalesce(excluded.phone, ${leads.phone})`, meta, lastSeenAt: new Date() },
+    });
+  try {
+    await mailer.send({ to: config.salesEmail, ...salesInquiryEmail(input) });
+  } catch (err) {
+    console.error("[sales] enquiry email failed (lead saved):", err);
+  }
+  return c.json({ ok: true }, 201);
 });
