@@ -94,7 +94,7 @@ export function useTilt(max = 10) {
 
 /** A burst of CSS confetti — no library needed. */
 export function Confetti({ pieces = 36 }: { pieces?: number }) {
-  const colors = ["#2dd4bf", "#a78bfa", "#ff6b4a", "#ffd23f", "#38bdf8"];
+  const colors = ["#2dd4bf", "#0d9488", "#99f6e4", "#cbd5e1", "#64748b"];
   const [bits] = useState(() =>
     Array.from({ length: pieces }, (_, i) => ({
       x: `${(Math.random() - 0.5) * 520}px`,

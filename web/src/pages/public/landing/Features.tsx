@@ -32,7 +32,7 @@ const STOPS: Stop[] = [
   {
     key: "dues",
     icon: <Wallet />,
-    accent: "from-coral-400 to-coral-600",
+    accent: "from-slate-500 to-slate-700",
     title: "Dues, month by month",
     body: "Who paid, who's late and who's behind, for every member. Record a payment in two taps.",
     src: "/f/demo/contributions",
@@ -50,7 +50,7 @@ const STOPS: Stop[] = [
   {
     key: "scores",
     icon: <Sparkles />,
-    accent: "from-sky-400 to-sky-600",
+    accent: "from-brand-500 to-brand-800",
     title: "Credit scores anyone can understand",
     body: "Five plain habits make up every member's score and borrowing limit. No black box.",
     src: "/f/demo/members/featured",
@@ -59,7 +59,7 @@ const STOPS: Stop[] = [
   {
     key: "books",
     icon: <Scale />,
-    accent: "from-sun-300 to-sun-500",
+    accent: "from-slate-600 to-slate-800",
     title: "Books that balance themselves",
     body: "Every cedi is double-entry. Inflows, outflows and the loan book are ready for the AGM and the auditors.",
     src: "/f/demo/reports",
@@ -68,7 +68,7 @@ const STOPS: Stop[] = [
   {
     key: "member",
     icon: <HeartPulse />,
-    accent: "from-rose-400 to-rose-600",
+    accent: "from-grape-400 to-grape-600",
     title: "A member app they'll actually open",
     body: "Members check savings, pay dues by mobile money, apply for loans and see their welfare cover, all from their phone.",
     src: "/f/demo-member/portal",

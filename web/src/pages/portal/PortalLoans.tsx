@@ -122,7 +122,7 @@ export function LoanApplicationForm({ membershipId, eligible = true, limitMinor,
           </div>
         </div>
       )}
-      {special && principal > 0 && <p className="rounded-lg bg-violet-50 px-3 py-2 text-sm text-violet-800 ring-1 ring-violet-200">This request is outside the standard rules, so it will go to the committee as a special review.</p>}
+      {special && principal > 0 && <p className="rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-800 ring-1 ring-brand-200">This request is outside the standard rules, so it will go to the committee as a special review.</p>}
       <ErrorText error={apply.error} />
       <Button loading={apply.isPending} disabled={!q || purpose.trim().length < 5 || (product && principal > product.maxAmountMinor)} onClick={() => apply.mutate(undefined)}>
         Submit application

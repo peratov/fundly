@@ -19,16 +19,19 @@
   --color-brand-800: #115e59;
   --color-brand-900: #134e4a;
 
-  /* Expressive accents used on the public site and member portal */
-  --color-coral-400: #ff8a65;
-  --color-coral-500: #ff6b4a;
-  --color-coral-600: #f04e2e;
-  --color-sun-300: #ffe07a;
-  --color-sun-400: #ffd23f;
-  --color-sun-500: #f5b700;
-  --color-grape-400: #a78bfa;
-  --color-grape-500: #8b5cf6;
-  --color-grape-600: #7c3aed;
+  /*
+   * Accent aliases. These used to be coral, yellow and purple; the UI is now deliberately
+   * calm: one teal accent and slate neutrals. The names stay so components don't change.
+   */
+  --color-coral-400: #2dd4bf;
+  --color-coral-500: #14b8a6;
+  --color-coral-600: #0f766e;
+  --color-sun-300: #a7e8dd;
+  --color-sun-400: #7dd3c4;
+  --color-sun-500: #3fb5a3;
+  --color-grape-400: #4b8f88;
+  --color-grape-500: #2f6f69;
+  --color-grape-600: #1f4f4b;
   --color-ink-900: #0b1020;
   --color-ink-950: #060913;
 
@@ -90,7 +93,7 @@
 @layer components {
   /* Animated multi-colour text used for hero headlines. */
   .text-rainbow {
-    background-image: linear-gradient(100deg, #2dd4bf, #a78bfa 30%, #ff8a65 60%, #ffd23f 80%, #2dd4bf);
+    background-image: linear-gradient(100deg, #5eead4, #ccfbf1 35%, #2dd4bf 65%, #5eead4);
     background-size: 250% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -121,7 +124,7 @@
   }
   .range::-webkit-slider-thumb {
     @apply size-6 appearance-none rounded-full border-4 border-white bg-coral-500 shadow-lg transition-transform;
-    box-shadow: 0 0 0 6px rgba(255, 107, 74, 0.25);
+    box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.25);
   }
   .range::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .range::-moz-range-thumb {
@@ -193,8 +196,8 @@ html.embed::-webkit-scrollbar {
   height: 28px;
   border-radius: 9999px;
   background: #fff;
-  border: 4px solid #7c3aed;
-  box-shadow: 0 6px 18px -4px rgb(124 58 237 / 0.6);
+  border: 4px solid #0f766e;
+  box-shadow: 0 6px 18px -4px rgb(15 118 110 / 0.45);
   transition: transform 0.15s;
 }
 .awa-range::-moz-range-thumb {
@@ -202,8 +205,8 @@ html.embed::-webkit-scrollbar {
   height: 20px;
   border-radius: 9999px;
   background: #fff;
-  border: 4px solid #7c3aed;
-  box-shadow: 0 6px 18px -4px rgb(124 58 237 / 0.6);
+  border: 4px solid #0f766e;
+  box-shadow: 0 6px 18px -4px rgb(15 118 110 / 0.45);
 }
 .awa-range:active::-webkit-slider-thumb {
   transform: scale(1.15);
@@ -212,5 +215,5 @@ html.embed::-webkit-scrollbar {
   outline: none;
 }
 .awa-range:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 6px rgb(124 58 237 / 0.25);
+  box-shadow: 0 0 0 6px rgb(15 118 110 / 0.25);
 }

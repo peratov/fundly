@@ -444,7 +444,7 @@ function PlanNotice() {
       ? `Your ${plan.name} plan ends ${days === 0 ? "today" : `in ${days} day${days === 1 ? "" : "s"}`}.`
       : `Your ${plan.name} plan ended ${-days} day${days === -1 ? "" : "s"} ago. Mobile money collection switches off when the grace period ends.`;
   return (
-    <div className={clsx("flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2 text-center text-xs font-medium sm:px-8", days >= 0 ? "bg-sky-50 text-sky-900 dark:bg-sky-950/40 dark:text-sky-200" : "bg-amber-50 text-amber-900 dark:bg-amber-950/40 dark:text-amber-200")}>
+    <div className={clsx("flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2 text-center text-xs font-medium sm:px-8", days >= 0 ? "bg-slate-100 text-slate-800 dark:bg-slate-800/60 dark:text-slate-200" : "bg-amber-50 text-amber-900 dark:bg-amber-950/40 dark:text-amber-200")}>
       <span>{text}</span>
       {owner ? (
         <Link to={`/f/${tenantId}/billing`} className="rounded-full bg-ink-900 px-3 py-1 font-semibold text-white hover:bg-ink-800 dark:bg-white dark:text-ink-900">

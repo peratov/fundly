@@ -139,7 +139,7 @@ export default function Portal() {
             <>
               <LoanSummary loan={openLoan} currency={currency} />
               {canPay ? (
-                <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-grape-500 to-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-grape-500/25 transition hover:scale-[1.02]">
+                <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-grape-500 to-grape-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-grape-500/25 transition hover:scale-[1.02]">
                   <Smartphone className="size-4" /> Make a repayment
                 </button>
               ) : (

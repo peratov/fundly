@@ -160,7 +160,7 @@ function ReviewForm({ loanId }: { loanId: string }) {
   const [notes, setNotes] = useState("");
   const review = useAction((decision: "approve" | "decline") => api.post(`${base}/loans/${loanId}/reviews`, { decision, notes }), { success: "Recommendation recorded" });
   return (
-    <Card title="Your committee recommendation" className="ring-2 ring-violet-200">
+    <Card title="Your committee recommendation" className="ring-2 ring-brand-200">
       <Field label="Notes for the manager" hint="Required — explain the reasoning so the decision is auditable">
         {(id) => <Textarea id={id} value={notes} onChange={(e) => setNotes(e.target.value)} />}
       </Field>

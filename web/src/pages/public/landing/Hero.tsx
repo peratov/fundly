@@ -111,8 +111,8 @@ const EVENT_STYLE: [prefix: string, icon: ReactNode, tone: string][] = [
   ["contribution", <Smartphone />, "from-brand-400 to-brand-600"],
   ["payment", <Smartphone />, "from-brand-400 to-brand-600"],
   ["loan", <Gavel />, "from-grape-400 to-grape-600"],
-  ["claim", <HeartPulse />, "from-coral-400 to-coral-600"],
-  ["member", <BadgeCheck />, "from-sky-400 to-sky-600"],
+  ["claim", <HeartPulse />, "from-slate-500 to-slate-700"],
+  ["member", <BadgeCheck />, "from-brand-500 to-brand-700"],
   ["shares", <TrendingUp />, "from-sun-300 to-sun-500"],
 ];
 const styleOf = (action: string) => EVENT_STYLE.find(([p]) => action.startsWith(p)) ?? ["", <Scale />, "from-sun-300 to-sun-500"];
@@ -152,7 +152,7 @@ function LiveStage() {
   return (
     <div className="relative mx-auto w-full max-w-md lg:max-w-none" {...tilt}>
       {/* Spinning ring behind the phone */}
-      <div className="absolute top-1/2 left-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 animate-spin-slow rounded-full opacity-60" style={{ background: "conic-gradient(from 0deg, #2dd4bf, #a78bfa, #ff6b4a, #ffd23f, #2dd4bf)", mask: "radial-gradient(circle, transparent 62%, black 63%, black 64%, transparent 65%)" }} aria-hidden />
+      <div className="absolute top-1/2 left-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 animate-spin-slow rounded-full opacity-60" style={{ background: "conic-gradient(from 0deg, #2dd4bf, #134e4a, #5eead4, #134e4a, #2dd4bf)", mask: "radial-gradient(circle, transparent 62%, black 63%, black 64%, transparent 65%)" }} aria-hidden />
 
       {/* Phone running the real member app */}
       <div className="relative mx-auto w-[18rem] rounded-[2.6rem] bg-gradient-to-b from-slate-700 to-slate-900 p-2.5 shadow-2xl shadow-black/60 ring-1 ring-white/20" style={{ transform: "translateZ(40px)" }}>

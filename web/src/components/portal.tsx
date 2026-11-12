@@ -7,10 +7,10 @@ import { clsx } from "./ui";
 /** Colour families used across the member portal. */
 export const TONES = {
   teal: { grad: "from-brand-400 via-brand-600 to-brand-800", soft: "bg-brand-500/10 text-brand-700 dark:text-brand-300", solid: "bg-brand-600" },
-  coral: { grad: "from-coral-400 via-coral-500 to-rose-600", soft: "bg-coral-500/10 text-coral-600 dark:text-coral-400", solid: "bg-coral-500" },
-  grape: { grad: "from-grape-400 via-grape-500 to-indigo-700", soft: "bg-grape-500/10 text-grape-600 dark:text-grape-400", solid: "bg-grape-500" },
-  sun: { grad: "from-sun-300 via-sun-400 to-orange-500", soft: "bg-sun-400/15 text-amber-700 dark:text-sun-300", solid: "bg-sun-400" },
-  rose: { grad: "from-rose-400 via-rose-500 to-fuchsia-600", soft: "bg-rose-500/10 text-rose-600 dark:text-rose-400", solid: "bg-rose-500" },
+  coral: { grad: "from-coral-400 via-coral-500 to-brand-800", soft: "bg-coral-500/10 text-coral-600 dark:text-coral-400", solid: "bg-coral-500" },
+  grape: { grad: "from-grape-400 via-grape-500 to-slate-800", soft: "bg-grape-500/10 text-grape-600 dark:text-grape-400", solid: "bg-grape-500" },
+  sun: { grad: "from-sun-300 via-sun-400 to-brand-600", soft: "bg-sun-400/15 text-brand-800 dark:text-sun-300", solid: "bg-sun-400" },
+  rose: { grad: "from-slate-500 via-slate-600 to-slate-800", soft: "bg-rose-500/10 text-rose-600 dark:text-rose-400", solid: "bg-rose-500" },
 } as const;
 export type PortalTone = keyof typeof TONES;
 
@@ -43,8 +43,8 @@ export function ScoreRing({ score, size = 132, light }: { score: number; size?: 
         <defs>
           <linearGradient id="scoreGrad" x1="0" x2="1" y1="0" y2="1">
             <stop offset="0%" stopColor="#2dd4bf" />
-            <stop offset="50%" stopColor="#a78bfa" />
-            <stop offset="100%" stopColor="#ff8a65" />
+            <stop offset="50%" stopColor="#14b8a6" />
+            <stop offset="100%" stopColor="#99f6e4" />
           </linearGradient>
         </defs>
         <circle cx="60" cy="60" r={r} fill="none" strokeWidth="10" className={light ? "stroke-white/20" : "stroke-slate-100 dark:stroke-slate-800"} />

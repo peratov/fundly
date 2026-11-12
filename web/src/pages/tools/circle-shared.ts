@@ -18,14 +18,15 @@ export const CURRENCY_OPTIONS = ["GHS", "NGN", "KES", "UGX", "ZAR", "USD", "GBP"
 
 /** Each friend gets a stable colour from this set, by position. */
 export const MEMBER_COLORS = [
+  // Teal and slate, alternating, so neighbours on the wheel stay easy to tell apart.
+  { bg: "#0d9488", grad: "from-brand-500 to-brand-700" },
+  { bg: "#475569", grad: "from-slate-500 to-slate-700" },
   { bg: "#14b8a6", grad: "from-brand-400 to-brand-600" },
-  { bg: "#ff6b4a", grad: "from-coral-400 to-coral-600" },
-  { bg: "#8b5cf6", grad: "from-grape-400 to-grape-600" },
-  { bg: "#f5b700", grad: "from-sun-300 to-sun-500" },
-  { bg: "#0ea5e9", grad: "from-sky-400 to-sky-600" },
-  { bg: "#f43f5e", grad: "from-rose-400 to-rose-600" },
-  { bg: "#22c55e", grad: "from-emerald-400 to-emerald-600" },
-  { bg: "#d946ef", grad: "from-fuchsia-400 to-fuchsia-600" },
+  { bg: "#1e293b", grad: "from-slate-700 to-slate-900" },
+  { bg: "#115e59", grad: "from-brand-700 to-brand-900" },
+  { bg: "#64748b", grad: "from-slate-400 to-slate-600" },
+  { bg: "#2f6f69", grad: "from-grape-400 to-grape-600" },
+  { bg: "#334155", grad: "from-slate-600 to-slate-800" },
 ];
 export const colorFor = (index: number) => MEMBER_COLORS[index % MEMBER_COLORS.length];
 

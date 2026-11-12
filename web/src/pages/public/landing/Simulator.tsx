@@ -57,7 +57,7 @@ function Slider({ label, value, min, max, step, onChange, display, hint }: { lab
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        style={{ background: `linear-gradient(90deg, #2dd4bf, #a78bfa ${pct / 2}%, #ff6b4a ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
+        style={{ background: `linear-gradient(90deg, #0d9488, #2dd4bf ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
       />
       {hint && <span className="mt-2 block text-xs text-white/40">{hint}</span>}
     </label>
@@ -77,8 +77,8 @@ function Chart({ series, start }: { series: ReturnType<typeof project>["series"]
     <svg viewBox={`0 0 ${W} ${H + 24}`} className="h-auto w-full overflow-visible" role="img" aria-label="Projected growth of the fund over time">
       <defs>
         <linearGradient id="simTotal" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#ff6b4a" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#ff6b4a" stopOpacity="0" />
+          <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#e2e8f0" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="simContrib" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.6" />
@@ -94,7 +94,7 @@ function Chart({ series, start }: { series: ReturnType<typeof project>["series"]
       <g clipPath="url(#simReveal)">
         <path d={area("total")} fill="url(#simTotal)" style={{ transition: "d 0.6s ease" }} />
         <path d={area("contributed")} fill="url(#simContrib)" style={{ transition: "d 0.6s ease" }} />
-        <path d={line("total")} fill="none" stroke="#ff8a65" strokeWidth="2.5" style={{ transition: "d 0.6s ease" }} />
+        <path d={line("total")} fill="none" stroke="#e2e8f0" strokeWidth="2.5" style={{ transition: "d 0.6s ease" }} />
         <path d={line("contributed")} fill="none" stroke="#2dd4bf" strokeWidth="2" style={{ transition: "d 0.6s ease" }} />
       </g>
       {Array.from({ length: years + 1 }, (_, i) => (
@@ -170,7 +170,7 @@ export function Simulator() {
                   <span className="h-1 w-4 rounded bg-brand-400" /> Dues paid in
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-1 w-4 rounded bg-coral-400" /> Fund value incl. interest
+                  <span className="h-1 w-4 rounded bg-slate-200" /> Fund value incl. interest
                 </span>
               </div>
             </div>

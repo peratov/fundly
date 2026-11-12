@@ -233,7 +233,7 @@ export function Footer() {
 // ---------------------------------------------------------------- free tool teaser
 
 const TEASER_NAMES = ["Ama", "Kofi", "Esi", "Yaw", "Afi", "Kwame"];
-const TEASER_COLORS = ["#14b8a6", "#ff6b4a", "#8b5cf6", "#f5b700", "#0ea5e9", "#f43f5e"];
+const TEASER_COLORS = ["#0d9488", "#475569", "#14b8a6", "#1e293b", "#115e59", "#64748b"];
 
 export function ToolTeaser() {
   const arc = (deg: number, r: number) => {
