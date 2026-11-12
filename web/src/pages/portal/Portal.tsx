@@ -72,7 +72,7 @@ export default function Portal() {
               </span>
               <StatusBadge status={member.standing} />
               {streak >= 3 && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-coral-500 to-sun-400 px-3 py-1 text-xs font-bold text-ink-950">
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-ink-950">
                   <Flame className="size-3.5" /> {streak}-month streak
                 </span>
               )}
@@ -95,8 +95,7 @@ export default function Portal() {
               <p className="text-white/60">Minimum {m(data.minContributionMinor)} per month</p>
             </div>
             {canPay ? (
-              <button onClick={() => setPaying("dues")} className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl sm:w-auto bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-2.5 text-sm font-bold text-ink-950 shadow-lg shadow-coral-500/30 transition hover:scale-[1.03]">
-                <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+              <button onClick={() => setPaying("dues")} className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl sm:w-auto bg-brand-500 hover:bg-brand-400 px-5 py-2.5 text-sm font-bold text-ink-950 shadow-sm transition hover:scale-[1.03]">
                 <Smartphone className="relative size-4" /> <span className="relative">Pay with MoMo</span>
               </button>
             ) : (
@@ -139,7 +138,7 @@ export default function Portal() {
             <>
               <LoanSummary loan={openLoan} currency={currency} />
               {canPay ? (
-                <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-grape-500 to-grape-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-grape-500/25 transition hover:scale-[1.02]">
+                <button onClick={() => setPaying(openLoan.id)} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-grape-600 hover:bg-grape-500 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:scale-[1.02]">
                   <Smartphone className="size-4" /> Make a repayment
                 </button>
               ) : (

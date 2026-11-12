@@ -338,7 +338,7 @@ export default function CircleView() {
                 <>
                   <p className="mt-5 font-display text-2xl leading-tight font-extrabold">Ready for more than a merry-go-round?</p>
                   <p className="mt-2 text-sm text-white/70">Turn this circle into a proper fund: savings that earn shares, loans between friends, welfare cover and mobile money collection.</p>
-                  <Link to={`/signup?${new URLSearchParams({ currency: c.currency, dues: String(c.amountMinor / 100), fund: c.name })}`} className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
+                  <Link to={`/signup?${new URLSearchParams({ currency: c.currency, dues: String(c.amountMinor / 100), fund: c.name })}`} className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-brand-500 hover:bg-brand-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
                     Upgrade to a AwaFund fund <ArrowRight className="size-4" />
                   </Link>
                   <p className="mt-2 text-xs text-white/40">Free forever for groups up to 25 · your circle stays free too</p>
@@ -347,7 +347,7 @@ export default function CircleView() {
                 <>
                   <p className="mt-5 font-display text-2xl leading-tight font-extrabold">Start your own circle — free</p>
                   <p className="mt-2 text-sm text-white/70">Spin the wheel for the order, share one link, and never argue about whose turn it is again.</p>
-                  <Link to="/tools/merry-go-round" className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-coral-500 to-sun-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
+                  <Link to="/tools/merry-go-round" className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-brand-500 hover:bg-brand-400 px-5 py-3 font-bold text-ink-950 hover:scale-[1.02]">
                     Plan a merry-go-round <ArrowRight className="size-4" />
                   </Link>
                   <button type="button" onClick={() => setRecovering(true)} className="mt-4 block text-left text-xs text-white/60 hover:text-white">

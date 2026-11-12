@@ -18,7 +18,7 @@ export function UpgradeCard({ title, body, points, compact, className }: { title
       <div className="pointer-events-none absolute -top-20 -right-16 size-56 rounded-full bg-grape-600/40 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute -bottom-24 -left-10 size-56 rounded-full bg-brand-500/30 blur-3xl" aria-hidden />
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-coral-500 to-sun-400 text-ink-950 shadow-lg">
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-500 text-ink-950 shadow-lg">
           <Gem className="size-5" />
         </span>
         <div className="min-w-0 flex-1">

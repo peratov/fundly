@@ -198,7 +198,7 @@ function Tab({ to, label, icon, primary, end }: { to: string; label: string; ico
     return (
       <li className="flex justify-center">
         <Link to={to} className="-mt-6 flex flex-col items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-200" aria-label={label}>
-          <span className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-coral-500 to-sun-400 text-ink-950 shadow-lg shadow-coral-500/40 ring-4 ring-white active:scale-95 dark:ring-slate-900 [&>svg]:size-6">{icon}</span>
+          <span className="flex size-14 items-center justify-center rounded-2xl bg-brand-500 text-ink-950 shadow-sm ring-4 ring-white active:scale-95 dark:ring-slate-900 [&>svg]:size-6">{icon}</span>
           {label}
         </Link>
       </li>
@@ -427,7 +427,7 @@ function PlanChip() {
       <span className="flex items-center gap-2 font-semibold text-white/80">
         <Gem className="size-3.5 text-sun-300" /> {plan.name} plan
       </span>
-      {plan.id === "free" ? <span className="rounded-full bg-gradient-to-r from-coral-500 to-sun-400 px-2 py-0.5 font-bold text-ink-950">Upgrade</span> : <span className="text-white/40">Manage</span>}
+      {plan.id === "free" ? <span className="rounded-full bg-brand-500 px-2 py-0.5 font-bold text-ink-950">Upgrade</span> : <span className="text-white/40">Manage</span>}
     </Link>
   );
 }

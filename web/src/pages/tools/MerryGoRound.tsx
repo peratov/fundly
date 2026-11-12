@@ -233,7 +233,7 @@ function Stepper({ step, onStep }: { step: number; onStep: (s: number) => void }
       {steps.map((s, i) => (
         <li key={s.n} className="flex flex-1 items-center gap-2">
           <button type="button" onClick={() => onStep(s.n)} className={clsx("flex items-center gap-2 rounded-full py-1.5 pr-3 pl-1.5 text-sm font-bold transition [&_svg]:size-4", step === s.n ? "bg-ink-950 text-white" : step > s.n ? "text-brand-700" : "text-slate-400")}>
-            <span className={clsx("flex size-7 items-center justify-center rounded-full", step === s.n ? "bg-gradient-to-br from-coral-500 to-sun-400 text-ink-950" : step > s.n ? "bg-brand-100" : "bg-slate-100")}>{step > s.n ? <Check /> : s.icon}</span>
+            <span className={clsx("flex size-7 items-center justify-center rounded-full", step === s.n ? "bg-brand-500 text-ink-950" : step > s.n ? "bg-brand-100" : "bg-slate-100")}>{step > s.n ? <Check /> : s.icon}</span>
             <span className="hidden sm:inline">{s.label}</span>
           </button>
           {i < steps.length - 1 && <span className={clsx("h-0.5 flex-1 rounded-full", step > s.n ? "bg-brand-400" : "bg-slate-100")} />}
@@ -285,7 +285,7 @@ function FriendsStep({ d, setD, onNext }: { d: Draft; setD: React.Dispatch<React
             add(t);
           }
         }} placeholder="Friend's name" className="min-w-0 flex-1 rounded-2xl border-0 bg-slate-50 px-4 py-3 font-semibold ring-1 ring-slate-200 focus:ring-2 focus:ring-coral-500" aria-label="Friend's name" />
-        <button type="submit" disabled={!name.trim() || d.members.length >= 50} className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sun-400 px-5 font-bold text-ink-950 disabled:opacity-40">
+        <button type="submit" disabled={!name.trim() || d.members.length >= 50} className="inline-flex items-center gap-1.5 rounded-2xl bg-brand-500 hover:bg-brand-400 px-5 font-bold text-ink-950 disabled:opacity-40">
           <UserPlus className="size-4" /> Add
         </button>
       </form>
@@ -389,8 +389,7 @@ function OrderStep({ d, setD, colorIndex, onSave, canSave }: { d: Draft; setD: R
         <p className="flex-1 text-sm text-slate-700">
           <span className="font-bold">Ready?</span> Save your circle to get a link for the group chat and your own tracker for who has paid.
         </p>
-        <button type="button" onClick={onSave} disabled={!canSave} className="group relative inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 px-6 py-3.5 font-bold text-ink-950 shadow-lg shadow-coral-500/30 transition hover:scale-[1.03] disabled:opacity-40 disabled:hover:scale-100">
-          <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+        <button type="button" onClick={onSave} disabled={!canSave} className="group relative inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-2xl bg-brand-500 hover:bg-brand-400 px-6 py-3.5 font-bold text-ink-950 shadow-sm transition hover:scale-[1.03] disabled:opacity-40 disabled:hover:scale-100">
           <Share2 className="relative size-4" /> <span className="relative">Save & share free</span>
         </button>
       </div>

@@ -158,14 +158,12 @@ export function Pricing() {
                 </ul>
 
                 {plan === "free" ? (
-                  <Link to="/signup" className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
-                    <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                  <Link to="/signup" className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-brand-500 hover:bg-brand-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
                     <span className="relative">Start free, no card</span>
                     <ArrowRight className="relative size-5 transition group-hover:translate-x-1" />
                   </Link>
                 ) : (
-                  <button onClick={() => setSales(plan)} className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
-                    <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                  <button onClick={() => setSales(plan)} className="group relative mt-8 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-brand-500 hover:bg-brand-400 py-4 text-base font-bold text-ink-950 transition hover:scale-[1.02]">
                     <MessageCircle className="relative size-5" />
                     <span className="relative">Contact sales</span>
                   </button>

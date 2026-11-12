@@ -13,7 +13,7 @@ const LINKS = [
 export function Logo({ light = true }: { light?: boolean }) {
   return (
     <Link to="/" className={clsx("flex items-center gap-2 font-display text-xl font-extrabold tracking-tight", light ? "text-white" : "text-slate-900 dark:text-white")}>
-      <span className="relative flex size-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-400 via-grape-500 to-coral-500 text-white shadow-lg shadow-grape-500/30">
+      <span className="relative flex size-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-400 via-grape-500 to-coral-500 text-white shadow-sm">
         <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M5.5 20 12 4.5 18.5 20M8.2 14h7.6" />
         </svg>
@@ -50,7 +50,7 @@ export function Nav() {
             Learn
           </a>
           <Link to="/tools/merry-go-round" className="ml-1 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/20 transition hover:bg-white/10">
-            Merry-go-round <span className="rounded-full bg-gradient-to-r from-coral-500 to-sun-400 px-1.5 py-px text-[10px] font-bold text-ink-950">FREE</span>
+            Merry-go-round <span className="rounded-full bg-brand-500 px-1.5 py-px text-[10px] font-bold text-ink-950">FREE</span>
           </Link>
         </nav>
         <div className="flex items-center gap-2">
@@ -58,7 +58,6 @@ export function Nav() {
             Sign in
           </Link>
           <Link to="/signup" className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-white px-5 py-2.5 text-sm font-bold text-ink-950 shadow-lg shadow-white/10 transition hover:scale-[1.03]">
-            <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-brand-200/60 to-transparent" />
             <span className="relative">Start free</span>
             <ArrowRight className="relative size-4 transition group-hover:translate-x-0.5" />
           </Link>

@@ -55,7 +55,7 @@ export function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="min-w-0">
           <Link to="/tools/merry-go-round" className="group mb-6 inline-flex animate-pop items-center gap-2 rounded-full bg-white/10 py-1.5 pr-4 pl-1.5 text-sm font-medium text-white/90 ring-1 ring-white/15 backdrop-blur transition hover:bg-white/15">
-            <span className="rounded-full bg-gradient-to-r from-coral-500 to-sun-400 px-2.5 py-0.5 text-xs font-bold text-ink-950">FREE</span>
+            <span className="rounded-full bg-brand-500 px-2.5 py-0.5 text-xs font-bold text-ink-950">FREE</span>
             Plan a merry-go-round with friends
             <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" />
           </Link>
@@ -71,9 +71,8 @@ export function Hero() {
           <div className="mt-10 flex animate-rise flex-wrap items-center gap-4 [animation-delay:220ms]">
             <Link
               to="/signup"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-coral-500 via-coral-400 to-sun-400 px-7 py-4 text-base font-bold text-ink-950 shadow-2xl shadow-coral-500/30 transition hover:scale-[1.03] hover:shadow-coral-500/50"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-brand-500 hover:bg-brand-400 px-7 py-4 text-base font-bold text-ink-950 shadow-sm transition hover:scale-[1.03]"
             >
-              <span className="absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
               <span className="relative">Start your fund free</span>
               <ArrowRight className="relative size-5 transition group-hover:translate-x-1" />
             </Link>
